@@ -156,7 +156,7 @@
                     zoom: 4
                 });
 
-                map.on("load", addPoints);
+                //map.on("load", addPoints);
 
                 function addPoints() {
                     graphicLayer = new GraphicsLayer();
@@ -238,7 +238,7 @@
                     };
 
                     var requestHandle = esriRequest({
-                        url: featureLayer.url,
+                        url: featureLayer.url + '/query',
                         content: params,
                         handleAs: "json",
                     }, {
