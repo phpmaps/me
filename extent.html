@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
     <title>Extent</title>
-
+    <link rel="stylesheet" href="https://js.arcgis.com/3.16/dijit/themes/claro/claro.css">
     <link rel="stylesheet" href="http://js.arcgis.com/3.16/esri/css/esri.css">
     <style>
         html,
@@ -16,13 +16,35 @@
             margin: 0;
             padding: 0;
         }
-        
-        .esriScalebar {
-            padding: 20px 20px;
+
+        .toolbar {
+            position: absolute;
+            top: 0;
+            height: 60px;
+            background-color: #fff;
+            color: black;
         }
-        
-        #map {
-            padding: 0;
+
+        .action {
+            color: red;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        #anonymous {
+            display: none;
+            padding: 5px;
+            text-align: center;
+        }
+
+        #personalized {
+            display: none;
+            padding: 5px;
+            text-align: center;
+        }
+
+        #userId {
+            font-weight: bold;
         }
     </style>
 
@@ -31,7 +53,7 @@
             parseOnLoad: true
         };
     </script>
-      <script src="http://js.arcgis.com/3.16/"></script>
+    <script src="http://js.arcgis.com/3.16/"></script>
     <script>
         var map, graphicLayer;
         require([
@@ -46,8 +68,14 @@
             "esri/InfoTemplate",
             "dojo/on",
             "dojo/_base/array",
+            "esri/arcgis/Portal",
+            "esri/arcgis/OAuthInfo",
+            "esri/IdentityManager",
+            "dojo/dom-style",
+            "dojo/dom-attr",
+            "dojo/dom",
             "dojo/domReady!"
-        ], function(
+        ], function (
             Map,
             FeatureLayer,
             Point,
@@ -58,62 +86,109 @@
             Color,
             InfoTemplate,
             on,
-            array
+            array,
+            arcgisPortal,
+            OAuthInfo,
+            esriId,
+            domStyle,
+            domAttr,
+            dom
         ) {
-            var featureLayer = new FeatureLayer("http://bankbeetle.esri.com/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1");
-            //http://bankbeetle.esri.com/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1
 
-            map = new Map("map", {
-                basemap: "gray",
-                center: [-46.807, 32.553],
-                zoom: 4
-            });
-            map.on("load", addPoints);
-            function addPoints() {
-                graphicLayer = new GraphicsLayer();
-                var poinArr = [
-                    [-74.049, 38.485],
-                    [-78.119, 36.125],
-                    [-58.189, 33.765],
-                    [-59.259, 31.405],
-                    [-84.329, 37.045],
-                    [-64.399, 28.685],
-                    [-88.469, 24.325],
-                    [-65.539, 56.965],
-                    [-64.609, 19.605],
-                    [-65.679, 17.245],
-                    [-79.749, 34.885],
-                    [-76.819, 45.525],
-                    [-110.889, 27.165],
-                    [-105.959, 37.805],
-                    [-117.029, 20.445],
-                    [-110.099, 52.085],
-                    [-98.169, 45.7250],
-                    [-87.239, 59.635],
-                    [-75.309, 58.995]
-                ];
-                array.forEach(poinArr, function(p) {
-                    var pointGeom = new Point([p[0], p[1]], new SpatialReference({
-                        wkid: 4326
-                    }));
-                    var sms = new SimpleMarkerSymbol().setStyle(
-                        SimpleMarkerSymbol.STYLE_CIRCLE).setColor(
-                        new Color([255, 110, 0, 0.5]));
-                    var attr = {
-                        "Xcoord": p[0],
-                        "Ycoord": p[1]
-                    };
-                    var infoTemplate = new InfoTemplate("My LatLongs", "Latitude: ${Ycoord} <br/>Longitude: ${Xcoord} <br/>");
-                    var g = new Graphic(pointGeom, sms, attr, infoTemplate);
-                    graphicLayer.add(g);
+                var info = new OAuthInfo({
+                    appId: "r39INBsvcaokxCns",
+                    popup: false
                 });
-                map.addLayer(featureLayer);
-            }
-        });
+                esriId.registerOAuthInfos([info]);
+
+                esriId.checkSignInStatus(info.portalUrl + "/sharing").then(
+                    function () {
+                        addLayers();
+                    }
+                ).otherwise(
+                    function () {
+                        // Anonymous view
+                        domStyle.set("anonymous", "display", "block");
+                        domStyle.set("personalized", "display", "none");
+                    }
+                );
+
+                on(dom.byId("sign-in"), "click", function () {
+                    console.log("click", arguments);
+                    esriId.getCredential(info.portalUrl + "/sharing");
+                });
+
+                on(dom.byId("sign-out"), "click", function () {
+                    esriId.destroyCredentials();
+                    window.location.reload();
+                });
+
+                map = new Map("map", {
+                    basemap: "gray",
+                    center: [-46.807, 32.553],
+                    zoom: 4
+                });
+
+                map.on("load", addPoints);
+
+                function addPoints() {
+                    graphicLayer = new GraphicsLayer();
+                    var poinArr = [
+                        [-74.049, 38.485],
+                        [-78.119, 36.125],
+                        [-58.189, 33.765],
+                        [-59.259, 31.405],
+                        [-84.329, 37.045],
+                        [-64.399, 28.685],
+                        [-88.469, 24.325],
+                        [-65.539, 56.965],
+                        [-64.609, 19.605],
+                        [-65.679, 17.245],
+                        [-79.749, 34.885],
+                        [-76.819, 45.525],
+                        [-110.889, 27.165],
+                        [-105.959, 37.805],
+                        [-117.029, 20.445],
+                        [-110.099, 52.085],
+                        [-98.169, 45.7250],
+                        [-87.239, 59.635],
+                        [-75.309, 58.995]
+                    ];
+                    array.forEach(poinArr, function (p) {
+                        var pointGeom = new Point([p[0], p[1]], new SpatialReference({
+                            wkid: 4326
+                        }));
+                        var sms = new SimpleMarkerSymbol().setStyle(
+                            SimpleMarkerSymbol.STYLE_CIRCLE).setColor(
+                                new Color([255, 110, 0, 0.5]));
+                        var attr = {
+                            "Xcoord": p[0],
+                            "Ycoord": p[1]
+                        };
+                        var infoTemplate = new InfoTemplate("My LatLongs", "Latitude: ${Ycoord} <br/>Longitude: ${Xcoord} <br/>");
+                        var g = new Graphic(pointGeom, sms, attr, infoTemplate);
+                        graphicLayer.add(g);
+                    });
+                }
+
+                function addLayers() {
+                    var featureLayer = new FeatureLayer("http://bankbeetle.esri.com/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1");
+                    map.addLayer(featureLayer);
+                }
+            });
     </script>
 </head>
 
-<body>
+<body class="claro">
+    <div class="toolbar">
+        <div id="anonymous">
+            <span id="sign-in" class="action">Sign In</span>
+        </div>
+        <div id="personalized">Welcome
+            <span id="userId"></span>
+            <span id="sign-out" class="action"> Sign Out</span>
+        </div>
+    </div>
     <div id="map"></div>
 </body>
 
