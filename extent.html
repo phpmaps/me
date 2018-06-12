@@ -28,9 +28,9 @@
 
         .content {
             position: absolute;
-            top: 60px;
             width: 100%;
             height: 100%;
+            top: 60px;
         }
 
         .action {
@@ -117,7 +117,7 @@
                     function () {
                         // Anonymous view
                         domStyle.set("anonymous", "display", "block");
-                        domStyle.set("personalized", "display", "none");
+                        domStyle.set("personalized", "display", "block");
                     }
                 );
 
@@ -188,6 +188,7 @@
 </head>
 
 <body class="claro">
+
     <div class="toolbar">
         <div id="anonymous">
             <span id="sign-in" class="action">Sign In</span>
@@ -197,6 +198,7 @@
             <span id="sign-out" class="action"> Sign Out</span>
         </div>
     </div>
+
     <div class="content">
         <div id="map"></div>
     </div>
