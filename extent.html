@@ -154,10 +154,10 @@
                     zoom: 4
                 });
 
-                // function addLayers() {
-                //     var featureLayer = new FeatureLayer("https://bankbeetle.esri.com/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1");
-                //     queryFeatures(featureLayer);
-                // }
+                function addLayers() {
+                    var featureLayer = new FeatureLayer("https://bankbeetle.esri.com/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1");
+                    featureLayer.on('load', queryFeatures(featureLayer);
+                }
 
                 function requestSucceeded(res) {
                     console.log(res);
@@ -176,7 +176,7 @@
                         f: "json"
                     };
                     var requestHandle = esriRequest({
-                        url: 'https://bankbeetle.esri.com/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1/query',
+                        url: featureLayer.url + '/query',
                         content: params,
                         handleAs: "json",
                     }, {
