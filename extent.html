@@ -156,67 +156,10 @@
                     zoom: 4
                 });
 
-                //map.on("load", addPoints);
-
-                function addPoints() {
-                    graphicLayer = new GraphicsLayer();
-                    var poinArr = [
-                        [-74.049, 38.485],
-                        [-78.119, 36.125],
-                        [-58.189, 33.765],
-                        [-59.259, 31.405],
-                        [-84.329, 37.045],
-                        [-64.399, 28.685],
-                        [-88.469, 24.325],
-                        [-65.539, 56.965],
-                        [-64.609, 19.605],
-                        [-65.679, 17.245],
-                        [-79.749, 34.885],
-                        [-76.819, 45.525],
-                        [-110.889, 27.165],
-                        [-105.959, 37.805],
-                        [-117.029, 20.445],
-                        [-110.099, 52.085],
-                        [-98.169, 45.7250],
-                        [-87.239, 59.635],
-                        [-75.309, 58.995]
-                    ];
-
-                    array.forEach(poinArr, function (p) {
-                        var pointGeom = new Point([p[0], p[1]], new SpatialReference({
-                            wkid: 4326
-                        }));
-                        var sms = new SimpleMarkerSymbol().setStyle(
-                            SimpleMarkerSymbol.STYLE_CIRCLE).setColor(
-                                new Color([255, 110, 0, 0.5]));
-                        var attr = {
-                            "Xcoord": p[0],
-                            "Ycoord": p[1]
-                        };
-                        var infoTemplate = new InfoTemplate("My LatLongs", "Latitude: ${Ycoord} <br/>Longitude: ${Xcoord} <br/>");
-                        var g = new Graphic(pointGeom, sms, attr, infoTemplate);
-                        graphicLayer.add(g);
-                    });
-                }
-
                 function addLayers() {
                     console.log("addLayers!");
                     var featureLayer = new FeatureLayer("https://bankbeetle.esri.com/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1");
-                    queryFeatures(featureLayer);
-                    // var query = new Query();
-                    // query = new Query();
-                    // query.where = "1=1";
-                    // query.returnGeometry = true;
-                    // query.outFields = ["*"];
-                    // featureLayer.queryFeatures(query, function (features) {
-                    //     var featureExtent = features[0].geometry.getExtent();
-                    //     console.log(featureExtent);
-
-                    //     console.log(featureSet);
-
-                    // });
-                    // map.addLayer(featureLayer);
-                    // console.log("addLayers!")
+                    //queryFeatures(featureLayer);
                 }
 
                 function requestSucceeded(res) {
