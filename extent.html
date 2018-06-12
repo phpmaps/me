@@ -103,6 +103,7 @@
             dom,
             Query
         ) {
+                esri.config.defaults.io.corsEnabledServers.push("http://bankbeetle.esri.com");
 
                 var info = new OAuthInfo({
                     appId: "r39INBsvcaokxCns",
@@ -197,29 +198,59 @@
                 function addLayers() {
                     console.log("addLayers!");
                     var featureLayer = new FeatureLayer("https://bankbeetle.esri.com/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1");
-                    var query = new Query();
-                    query = new Query();
-                    query.where = "1=1";
-                    query.returnGeometry = true;
-                    query.outFields = ["*"];
-                    featureLayer.queryFeatures(query, function(features) {
-                        var featureExtent = features[0].geometry.getExtent();
-                        console.log(featureExtent);
+                    queryFeatures(featureLayer);
+                    // var query = new Query();
+                    // query = new Query();
+                    // query.where = "1=1";
+                    // query.returnGeometry = true;
+                    // query.outFields = ["*"];
+                    // featureLayer.queryFeatures(query, function (features) {
+                    //     var featureExtent = features[0].geometry.getExtent();
+                    //     console.log(featureExtent);
 
-                        console.log(featureSet);
+                    //     console.log(featureSet);
 
-                    });
-                    //map.addLayer(featureLayer);
-                    //console.log("addLayers!")
+                    // });
+                    // map.addLayer(featureLayer);
+                    // console.log("addLayers!")
                 }
 
-            function centerPoint(featureExtent, point) {
-                var xMid = (featureExtent.xmin + featureExtent.xmax) / 2;
-                var yMid = (featureExtent.ymin + featureExtent.ymax) / 2;
-                point.x = xMid;
-                point.y = yMid;
-                point.spatialReference = map.spatialReference;
-            }
+                function requestSucceeded(res) {
+                    console.log(res);
+                }
+
+                function requestFailed(evt) {
+                    console.log("failed", evt);
+                }
+
+                function queryFeatures(featureLayer) {
+
+
+                    var params = {
+                        where: "1=1",
+                        outFields: ["*"],
+                        returnGeometry: true,
+                        f: "json"
+                    };
+
+                    var requestHandle = esriRequest({
+                        url: featureLayer.url,
+                        content: params,
+                        handleAs: "json",
+                    }, {
+                            usePost: false
+                        });
+
+                    requestHandle.then(requestSucceeded, requestFailed);
+                }
+
+                function centerPoint(featureExtent, point) {
+                    var xMid = (featureExtent.xmin + featureExtent.xmax) / 2;
+                    var yMid = (featureExtent.ymin + featureExtent.ymax) / 2;
+                    point.x = xMid;
+                    point.y = yMid;
+                    point.spatialReference = map.spatialReference;
+                }
             });
     </script>
 </head>
