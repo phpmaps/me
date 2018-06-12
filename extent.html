@@ -120,7 +120,7 @@
                     function () {
                         new arcgisPortal.Portal(info.portalUrl).signIn().then(
                             function (portalUser) {
-                                esriId.initialize(credentialsJSON);
+                                //esriId.initialize(credentialsJSON);
                                 console.log(portalUser)
                                 crap = portalUser;
                                 domAttr.set("userId", "innerHTML", portalUser.fullName);
