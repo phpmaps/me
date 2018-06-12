@@ -82,6 +82,8 @@
             "dojo/dom-attr",
             "dojo/dom",
             "esri/tasks/query",
+            "esri/arcgis/utils",
+            "esri/request",
             "dojo/domReady!"
         ], function (
             Map,
@@ -101,7 +103,9 @@
             domStyle,
             domAttr,
             dom,
-            Query
+            Query,
+            arcgisUtils, 
+            esriRequest
         ) {
                 esri.config.defaults.io.corsEnabledServers.push("http://bankbeetle.esri.com");
 
