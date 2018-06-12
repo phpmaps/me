@@ -108,7 +108,7 @@
             esriRequest
         ) {
                 esri.config.defaults.io.corsEnabledServers.push("http://bankbeetle.esri.com");
-
+                var crap = null;
                 var info = new OAuthInfo({
                     appId: "r39INBsvcaokxCns",
                     popup: false,
@@ -120,14 +120,13 @@
                     function () {
                         new arcgisPortal.Portal(info.portalUrl).signIn().then(
                             function (portalUser) {
+                                esriId.initialize(credentialsJSON);
+                                console.log(portalUser)
+                                crap = portalUser;
                                 domAttr.set("userId", "innerHTML", portalUser.fullName);
                                 domStyle.set("anonymous", "display", "none");
                                 domStyle.set("personalized", "display", "block");
                                 addLayers();
-                            }
-                        ).otherwise(
-                            function (error) {
-                                console.log("Error occurred while signing in: ", error);
                             }
                         );
                     }
@@ -157,9 +156,8 @@
                 });
 
                 function addLayers() {
-                    console.log("addLayers!");
                     var featureLayer = new FeatureLayer("https://bankbeetle.esri.com/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1");
-                    //queryFeatures(featureLayer);
+                    queryFeatures(featureLayer);
                 }
 
                 function requestSucceeded(res) {
@@ -171,19 +169,18 @@
                 }
 
                 function queryFeatures(featureLayer) {
-
-
+                    console.log(crap);
                     var params = {
                         where: "1=1",
                         outFields: ["*"],
                         returnGeometry: true,
                         f: "json"
                     };
-
                     var requestHandle = esriRequest({
                         url: featureLayer.url + '/query',
                         content: params,
                         handleAs: "json",
+                        token: crap.credential.token
                     }, {
                             usePost: false
                         });
