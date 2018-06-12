@@ -113,12 +113,9 @@
                     function () {
                         new arcgisPortal.Portal(info.portalUrl).signIn().then(
                             function (portalUser) {
-                                console.log("Signed in to the portal: ", portalUser);
-
                                 domAttr.set("userId", "innerHTML", portalUser.fullName);
                                 domStyle.set("anonymous", "display", "none");
                                 domStyle.set("personalized", "display", "block");
-
                                 addLayers();
                             }
                         ).otherwise(
@@ -127,8 +124,6 @@
                             }
                         );
                     }
-                    // console.log("resolveCheckSignInStatus");
-                    // addLayers();
                 ).otherwise(
                     function () {
                         // Anonymous view
