@@ -81,6 +81,7 @@
             "dojo/dom-style",
             "dojo/dom-attr",
             "dojo/dom",
+            "esri/tasks/query",
             "dojo/domReady!"
         ], function (
             Map,
@@ -99,7 +100,8 @@
             esriId,
             domStyle,
             domAttr,
-            dom
+            dom,
+            Query
         ) {
 
                 var info = new OAuthInfo({
@@ -195,8 +197,14 @@
                 function addLayers() {
                     console.log("addLayers!");
                     var featureLayer = new FeatureLayer("https://bankbeetle.esri.com/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1");
-                    map.addLayer(featureLayer);
-                    console.log("addLayers!")
+                    var query = new Query();
+                    query.outFields = ["*"];
+                    query.returnGeometry = true;
+                    featureLayer.queryFeatures(query, function(featureSet) {
+                        console.log(featureSet);
+                    });
+                    //map.addLayer(featureLayer);
+                    //console.log("addLayers!")
                 }
             });
     </script>
