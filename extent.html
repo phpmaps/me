@@ -108,7 +108,7 @@
             esriRequest
         ) {
                 esri.config.defaults.io.corsEnabledServers.push("http://bankbeetle.esri.com");
-                var crap = null;
+                var featureLayer;
                 var info = new OAuthInfo({
                     appId: "r39INBsvcaokxCns",
                     popup: false,
@@ -120,8 +120,6 @@
                     function () {
                         new arcgisPortal.Portal(info.portalUrl).signIn().then(
                             function (portalUser) {
-                                console.log(portalUser)
-                                crap = portalUser;
                                 domAttr.set("userId", "innerHTML", portalUser.fullName);
                                 domStyle.set("anonymous", "display", "none");
                                 domStyle.set("personalized", "display", "block");
@@ -131,10 +129,8 @@
                     }
                 ).otherwise(
                     function () {
-                        // Anonymous view
                         domStyle.set("anonymous", "display", "block");
                         domStyle.set("personalized", "display", "none");
-                        console.log("otherwise");
                     }
                 );
 
@@ -155,8 +151,8 @@
                 });
 
                 function addLayers() {
-                    var featureLayer = new FeatureLayer("https://bankbeetle.esri.com/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1");
-                    featureLayer.on('load', queryFeatures(layer));
+                    featureLayer = new FeatureLayer("https://bankbeetle.esri.com/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1");
+                    featureLayer.on('load', queryFeatures());
                 }
 
                 function requestSucceeded(res) {
@@ -167,8 +163,8 @@
                     console.log("failed", evt);
                 }
 
-                function queryFeatures(layer) {
-                    console.log(layer);
+                function queryFeatures() {
+                    console.log(featureLayer);
                     var params = {
                         where: "1=1",
                         outFields: ["*"],
@@ -176,7 +172,7 @@
                         f: "json"
                     };
                     var requestHandle = esriRequest({
-                        url: layer.url + '/query',
+                        url: featureLayer.url + '/query',
                         content: params,
                         handleAs: "json",
                     }, {
