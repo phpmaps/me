@@ -198,7 +198,8 @@
                     console.log("addLayers!");
                     var featureLayer = new FeatureLayer("https://bankbeetle.esri.com/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1");
                     var query = new Query();
-                    query.outFields = ["*"];
+                    query = new Query();
+                    query.where = "1=1";
                     query.returnGeometry = true;
                     featureLayer.queryFeatures(query, function(featureSet) {
                         console.log(featureSet);
