@@ -201,12 +201,24 @@
                     query = new Query();
                     query.where = "1=1";
                     query.returnGeometry = true;
-                    featureLayer.queryFeatures(query, function(featureSet) {
+                    featureLayer.queryFeatures(query, function(features) {
+                        var featureExtent = features[0].geometry.getExtent();
+                        console.log(featureExtent);
+
                         console.log(featureSet);
+
                     });
                     //map.addLayer(featureLayer);
                     //console.log("addLayers!")
                 }
+
+            function centerPoint(featureExtent, point) {
+                var xMid = (featureExtent.xmin + featureExtent.xmax) / 2;
+                var yMid = (featureExtent.ymin + featureExtent.ymax) / 2;
+                point.x = xMid;
+                point.y = yMid;
+                point.spatialReference = map.spatialReference;
+            }
             });
     </script>
 </head>
