@@ -105,7 +105,8 @@
 
                 var info = new OAuthInfo({
                     appId: "r39INBsvcaokxCns",
-                    popup: false
+                    popup: false,
+                    portalUrl: "https://bankbeetle.esri.com/portal"
                 });
                 esriId.registerOAuthInfos([info]);
 
@@ -180,7 +181,7 @@
                 }
 
                 function addLayers() {
-                    var featureLayer = new FeatureLayer("http://bankbeetle.esri.com/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1");
+                    var featureLayer = new FeatureLayer("https://bankbeetle.esri.com/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1");
                     map.addLayer(featureLayer);
                 }
             });
