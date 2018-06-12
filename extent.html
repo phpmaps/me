@@ -156,7 +156,7 @@
 
                 function addLayers() {
                     var featureLayer = new FeatureLayer("https://bankbeetle.esri.com/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1");
-                    featureLayer.on('load', queryFeatures(featureLayer));
+                    featureLayer.on('load', queryFeatures(layer));
                 }
 
                 function requestSucceeded(res) {
@@ -167,7 +167,7 @@
                     console.log("failed", evt);
                 }
 
-                function queryFeatures(featureLayer) {
+                function queryFeatures(layer) {
                     console.log(crap);
                     var params = {
                         where: "1=1",
@@ -176,7 +176,7 @@
                         f: "json"
                     };
                     var requestHandle = esriRequest({
-                        url: featureLayer.url + '/query',
+                        url: layer.url + '/query',
                         content: params,
                         handleAs: "json",
                     }, {
