@@ -152,7 +152,7 @@
 
                 function addLayers() {
                     featureLayer = new FeatureLayer("https://bankbeetle.esri.com/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1");
-                    featureLayer.on('load', queryFeatures(layer));
+                    featureLayer.on('load', queryFeatures());
                 }
 
                 function requestSucceeded(res) {
