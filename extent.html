@@ -107,8 +107,8 @@
                     popup: false,
                     portalUrl: "https://bankbeetle.esri.com/portal"
                 });
-                esriId.registerOAuthInfos([info]);
 
+                esriId.registerOAuthInfos([info]);
                 esriId.checkSignInStatus(info.portalUrl + "/sharing").then(
                     function () {
                         console.log("resolveCheckSignInStatus");
@@ -124,7 +124,7 @@
                 );
 
                 on(dom.byId("sign-in"), "click", function () {
-                    console.log("click", arguments);
+                    console.log("sign-in");
                     esriId.getCredential(info.portalUrl + "/sharing");
                 });
 
@@ -164,6 +164,7 @@
                         [-87.239, 59.635],
                         [-75.309, 58.995]
                     ];
+
                     array.forEach(poinArr, function (p) {
                         var pointGeom = new Point([p[0], p[1]], new SpatialReference({
                             wkid: 4326
