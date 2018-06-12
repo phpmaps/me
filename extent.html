@@ -174,11 +174,10 @@
                         where: "1=1",
                         outFields: ["*"],
                         returnGeometry: true,
-                        f: "json",
-                        token: crap.credential.token
+                        f: "json"
                     };
                     var requestHandle = esriRequest({
-                        url: featureLayer.url + '/query',
+                        url: featureLayer.url + '/query?token=' + crap.credential.token,
                         content: params,
                         handleAs: "json",
                     }, {
