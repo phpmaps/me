@@ -201,6 +201,7 @@
                     query = new Query();
                     query.where = "1=1";
                     query.returnGeometry = true;
+                    query.outFields = ["*"];
                     featureLayer.queryFeatures(query, function(features) {
                         var featureExtent = features[0].geometry.getExtent();
                         console.log(featureExtent);
