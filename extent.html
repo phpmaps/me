@@ -392,6 +392,7 @@
             "esri/map",
             "esri/layers/FeatureLayer",
             "esri/geometry/Point",
+            "esri/geometry/Polygon",
             "esri/graphic",
             "esri/layers/GraphicsLayer",
             "esri/symbols/SimpleMarkerSymbol",
@@ -418,6 +419,7 @@
             Map,
             FeatureLayer,
             Point,
+            Polygon,
             Graphic,
             GraphicsLayer,
             SimpleMarkerSymbol,
@@ -629,7 +631,9 @@
                 function drawFeatures(featureSet){
                     for(var i = 0; i < featureSet.features.length; i++){
                         var feature = featureSet.features[i];
-                        var g = new Graphic(feature.geometry, getFillSymbol());
+                        var poly = new Polygon(JSON.stringify(feature.geometry));
+                        var sfs = getFillSymbol();
+                        var g = new Graphic(poly, sfs);
                         graphicLayer.add(g);
                     }
                 }
