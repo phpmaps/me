@@ -629,8 +629,8 @@
                 function drawFeatures(featureSet){
                     for(var i = 0; i < featureSet.features.length; i++){
                         var feature = featureSet.features[i];
-                        var graphic = new Graphic(feature.geometry, sfs);
-                        map.graphics.add(graphic);
+                        var graphic = new Graphic(feature.geometry, getFillSymbol());
+                        graphicLayer.add(graphic);
                     }
                 }
 
