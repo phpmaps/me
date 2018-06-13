@@ -117,7 +117,7 @@
                 esri.config.defaults.io.corsEnabledServers.push(arcgisDomain);
                 var info = new OAuthInfo({ appId: appId, popup: false, portalUrl: arcgisPortal });
                 esriId.registerOAuthInfos([info]);
-                esriId.checkSignInStatus(info.portalUrl + "/sharing").then(
+                esriId.checkSignInStatus(info.portalUrl + "/sharing/rest").then(
                     function () {
                         new arcgisPortal.Portal(info.portalUrl).signIn().then(
                             function (portalUser) {
