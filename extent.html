@@ -169,8 +169,7 @@
                 function queryFeature(oid) {
                     var params = {
                         objectIds: oid,
-                        outFields: ["*"],
-                        returnGeometry: true,
+                        returnExtentOnly: true,
                         f: "json"
                     };
                     var requestHandle = esriRequest({
@@ -185,8 +184,7 @@
 
                 }
 
-                function queryFeatures(layer) {
-                    console.log("layer", layer);
+                function queryFeatures() {
                     console.log("featureLayer", featureLayer);
                     var oids = [1, 2, 3];
                     for (var i = 0; i < oids.length; i++) {
