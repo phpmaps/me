@@ -104,7 +104,7 @@
             domAttr,
             dom,
             Query,
-            arcgisUtils, 
+            arcgisUtils,
             esriRequest
         ) {
                 esri.config.defaults.io.corsEnabledServers.push("http://bankbeetle.esri.com");
@@ -151,11 +151,12 @@
 
                 function addLayers() {
                     featureLayer = new FeatureLayer("https://bankbeetle.esri.com/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1");
+                    //featureLayer.on('load', queryFeatures());
                     featureLayer.on('load', queryFeatures());
                 }
 
                 function requestSucceeded(res) {
-                    for(var i=0; i<res.features.length; i++ ){
+                    for (var i = 0; i < res.features.length; i++) {
                         console.log(res.features[i]);
                     }
                     console.log(res);
@@ -165,9 +166,33 @@
                     console.log("failed", evt);
                 }
 
+                function queryFeature(oid) {
+                    var params = {
+                        objectIds: oid,
+                        outFields: ["*"],
+                        returnGeometry: true,
+                        f: "json"
+                    };
+                    var requestHandle = esriRequest({
+                        url: featureLayer.url + '/query',
+                        content: params,
+                        handleAs: "json",
+                    }, {
+                            usePost: false
+                        });
+
+                    requestHandle.then(requestSucceeded, requestFailed);
+
+                }
+
                 function queryFeatures(layer) {
-                    console.log(layer);
-                    console.log(featureLayer);
+                    console.log("layer", layer);
+                    console.log("featureLayer", featureLayer);
+                    var oids = [1, 2, 3];
+                    for (var i = 0; i < oids.length; i++) {
+                        queryFeature(oid[i]);
+                    }
+                    return;
                     var params = {
                         objectIds: "1,2,3",
                         outFields: ["*"],
@@ -193,7 +218,7 @@
                     point.spatialReference = map.spatialReference;
                 }
 
-                function drawExtent(){
+                function drawExtent() {
                     graphicLayer = new GraphicsLayer();
                 }
             });
