@@ -70,6 +70,8 @@
             "esri/graphic",
             "esri/layers/GraphicsLayer",
             "esri/symbols/SimpleMarkerSymbol",
+            "esri/symbols/SimpleFillSymbol", 
+            "esri/symbols/SimpleLineSymbol",
             "esri/SpatialReference",
             "esri/Color",
             "esri/InfoTemplate",
@@ -84,6 +86,8 @@
             "esri/tasks/query",
             "esri/arcgis/utils",
             "esri/request",
+            "esri/geometry/Extent",
+            "esri/SpatialReference",
             "dojo/domReady!"
         ], function (
             Map,
@@ -92,6 +96,8 @@
             Graphic,
             GraphicsLayer,
             SimpleMarkerSymbol,
+            SimpleFillSymbol,
+            SimpleLineSymbol,
             SpatialReference,
             Color,
             InfoTemplate,
@@ -155,11 +161,24 @@
                     featureLayer.on('load', queryFeatures());
                 }
 
+                function getFillSymbol() {
+                    var r = Math.floor(Math.random() * 250);
+                    var g = Math.floor(Math.random() * 100);
+                    var b = Math.floor(Math.random() * 100);
+                    return new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
+                        new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                            new Color([r, g, b]), 1), new Color([r, g, b, 0.25])
+                    );
+                }
+
                 function requestSucceeded(res) {
                     // for (var i = 0; i < res.features.length; i++) {
                     //     console.log(res.features[i]);
                     // }
-                    console.log(res.extent);
+
+                    var extent = new Extent(res.extent);
+                    var graphic = new Graphic(extent, getFillSymbol());
+                    graphicLayer.add(graphic);
                 }
 
                 function requestFailed(evt) {
@@ -185,6 +204,8 @@
                 }
 
                 function queryFeatures() {
+                    graphicLayer = new GraphicsLayer();
+                    map.addLayer(graphicLayer);
                     console.log("featureLayer", featureLayer);
                     var oids = [1, 2, 3];
                     for (var i = 0; i < oids.length; i++) {
@@ -217,7 +238,7 @@
                 }
 
                 function drawExtent() {
-                    graphicLayer = new GraphicsLayer();
+
                 }
             });
     </script>
