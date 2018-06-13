@@ -70,7 +70,7 @@
             "esri/graphic",
             "esri/layers/GraphicsLayer",
             "esri/symbols/SimpleMarkerSymbol",
-            "esri/symbols/SimpleFillSymbol", 
+            "esri/symbols/SimpleFillSymbol",
             "esri/symbols/SimpleLineSymbol",
             "esri/SpatialReference",
             "esri/Color",
@@ -176,7 +176,11 @@
                     //     console.log(res.features[i]);
                     // }
 
-                    var extent = new Extent(JSON.stringify(res.extent));
+                    //var extent = new Extent(JSON.stringify(res.extent));
+                    var extent = new esri.geometry.Extent({
+                        "xmin": -122.68, "ymin": 45.53, "xmax": -122.45, "ymax": 45.6,
+                        "spatialReference": { "wkid": 4326 }
+                    });
                     var sfs = getFillSymbol();
                     var graphic = new Graphic(extent, sfs);
                     graphicLayer.add(graphic);
