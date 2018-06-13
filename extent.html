@@ -503,7 +503,9 @@
                 });
 
                 function addLayers() {
-                    featureLayer = new FeatureLayer(arcgisDomain + "/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1");
+                    featureLayer = new FeatureLayer(arcgisDomain + "/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1", {
+                        mode: FeatureLayer.MODE_SNAPSHOT
+                    });
                     //featureLayer.on('load', queryFeatures());
                     featureLayer.on('load', queryFeatures());
                 }
@@ -628,10 +630,11 @@
                     requestHandle.then(drawFeatures, requestFailed);
                 }
 
-                function drawFeatures(featureSet){
-                    for(var i = 0; i < featureSet.features.length; i++){
+                function drawFeatures(featureSet) {
+                    for (var i = 0; i < featureSet.features.length; i++) {
                         var feature = featureSet.features[i];
-                        var poly = new Polygon(JSON.stringify(feature.geometry));
+                        var poly = new Polygon();
+                        poly = feature.geometry;
                         var sfs = getFillSymbol();
                         var g = new Graphic(poly, sfs);
                         map.graphics.add(g);
