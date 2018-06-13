@@ -504,7 +504,8 @@
 
                 function addLayers() {
                     featureLayer = new FeatureLayer(arcgisDomain + "/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1", {
-                        mode: FeatureLayer.MODE_SNAPSHOT
+                        mode: FeatureLayer.MODE_SNAPSHOT,
+                        outFields: ["*"]
                     });
                     //featureLayer.on('load', queryFeatures());
                     featureLayer.on('load', queryFeatures());
