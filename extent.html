@@ -470,9 +470,9 @@
                                 domStyle.set("anonymous", "display", "none");
                                 domStyle.set("personalized", "display", "block");
                                 addGraphicsLayer();
-                                addLayers();
-                                dataExtent();
-                                featuresExtent();
+                                //addLayers();
+                                //dataExtent();
+                                //featuresExtent();
                                 calcMaxOffset();
                                 queryFeatures();
 
@@ -634,7 +634,7 @@
                         var poly = new Polygon(JSON.stringify(feature.geometry));
                         var sfs = getFillSymbol();
                         var g = new Graphic(poly, sfs);
-                        graphicLayer.add(g);
+                        map.graphics.add(g);
                     }
                 }
 
