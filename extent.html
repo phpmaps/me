@@ -453,6 +453,7 @@
                 });
 
                 esriId.registerOAuthInfos([info]);
+                console.log(info.portalUrl);
                 esriId.checkSignInStatus(info.portalUrl + "/sharing").then(
                     function () {
                         new arcgisPortal.Portal(info.portalUrl).signIn().then(
