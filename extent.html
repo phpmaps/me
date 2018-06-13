@@ -177,7 +177,8 @@
                     // }
 
                     var extent = new Extent(res.extent);
-                    var graphic = new Graphic(extent, getFillSymbol());
+                    var sfs = getFillSymbol();
+                    var graphic = new Graphic(extent, sfs);
                     graphicLayer.add(graphic);
                 }
 
