@@ -387,7 +387,7 @@
     </script>
     <script src="https://js.arcgis.com/3.24/"></script>
     <script>
-        var map, graphicLayer, featureLayer, arcgisDomain, arcgisPortal, appId;
+        var map, graphicLayer, featureLayer, arcgisDomain, arcgisPortalUrl, appId;
         require([
             "esri/map",
             "esri/layers/FeatureLayer",
@@ -441,15 +441,21 @@
                 useBankBeetle();
                 function useBankBeetle() {
                     arcgisDomain = "https://bankbeetle.esri.com";
-                    arcgisPortal = arcgisDomain + '/portal';
+                    arcgisPortalUrl = arcgisDomain + '/portal';
                     appId = "r39INBsvcaokxCns";
+                }
+
+                function useCrystalBugger() {
+                    arcgisDomain = "https://crystalbugger.esri.com";
+                    arcgisPortalUrl = arcgisDomain + '/arcgis';
+                    appId = "vVlLOA5bg05fnt9d";
                 }
 
                 esri.config.defaults.io.corsEnabledServers.push(arcgisDomain);
                 var info = new OAuthInfo({
                     appId: appId,
                     popup: false,
-                    portalUrl: arcgisPortal
+                    portalUrl: arcgisPortalUrl
                 });
 
                 esriId.registerOAuthInfos([info]);
