@@ -62,7 +62,7 @@
     </script>
     <script src="https://js.arcgis.com/3.20/"></script>
     <script>
-        var map, graphicLayer;
+        var map, graphicLayer, featureLayer;
         require([
             "esri/map",
             "esri/layers/FeatureLayer",
@@ -108,7 +108,6 @@
             esriRequest
         ) {
                 esri.config.defaults.io.corsEnabledServers.push("http://bankbeetle.esri.com");
-                var featureLayer;
                 var info = new OAuthInfo({
                     appId: "r39INBsvcaokxCns",
                     popup: false,
@@ -156,6 +155,9 @@
                 }
 
                 function requestSucceeded(res) {
+                    for(var i=0; i<res.features.length; i++ ){
+                        console.log(features[i]);
+                    }
                     console.log(res);
                 }
 
@@ -189,6 +191,10 @@
                     point.x = xMid;
                     point.y = yMid;
                     point.spatialReference = map.spatialReference;
+                }
+
+                function drawExtent(){
+                    graphicLayer = new GraphicsLayer();
                 }
             });
     </script>
