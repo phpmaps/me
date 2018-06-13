@@ -387,7 +387,7 @@
     </script>
     <script src="https://js.arcgis.com/3.24/"></script>
     <script>
-        var map, graphicLayer, featureLayer;
+        var map, graphicLayer, featureLayer, arcgisDomain, arcgisPortal, appId;
         require([
             "esri/map",
             "esri/layers/FeatureLayer",
@@ -438,11 +438,18 @@
             arcgisUtils,
             esriRequest
         ) {
-                esri.config.defaults.io.corsEnabledServers.push("http://bankbeetle.esri.com");
+                useBankBeetle();
+                function useBankBeetle() {
+                    arcgisDomain = "https://bankbeetle.esri.com";
+                    arcgisPortal = arcgisDomain + '/portal';
+                    appId = "r39INBsvcaokxCns";
+                }
+
+                esri.config.defaults.io.corsEnabledServers.push(arcgisDomain);
                 var info = new OAuthInfo({
-                    appId: "r39INBsvcaokxCns",
+                    appId: appId,
                     popup: false,
-                    portalUrl: "https://bankbeetle.esri.com/portal"
+                    portalUrl: arcgisPortal
                 });
 
                 esriId.registerOAuthInfos([info]);
@@ -484,7 +491,7 @@
                 });
 
                 function addLayers() {
-                    featureLayer = new FeatureLayer("https://bankbeetle.esri.com/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1");
+                    featureLayer = new FeatureLayer(arcgisDomain + "/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1");
                     //featureLayer.on('load', queryFeatures());
                     featureLayer.on('load', queryFeatures());
                 }
