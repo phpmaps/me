@@ -62,7 +62,7 @@
     </script>
     <script src="https://js.arcgis.com/3.24/"></script>
     <script>
-        var map, graphicLayer, featureLayer;
+        var map, graphicLayer, featureLayer, arcgisDomain, arcgisPortal, appId;
         require([
             "esri/map",
             "esri/layers/FeatureLayer",
@@ -113,13 +113,9 @@
             arcgisUtils,
             esriRequest
         ) {
-                esri.config.defaults.io.corsEnabledServers.push("http://bankbeetle.esri.com");
-                var info = new OAuthInfo({
-                    appId: "r39INBsvcaokxCns",
-                    popup: false,
-                    portalUrl: "https://bankbeetle.esri.com/portal"
-                });
-
+                useCrystalBugger()
+                esri.config.defaults.io.corsEnabledServers.push(arcgisDomain);
+                var info = new OAuthInfo({ appId: "r39INBsvcaokxCns", popup: false, portalUrl: arcgisPortal });
                 esriId.registerOAuthInfos([info]);
                 esriId.checkSignInStatus(info.portalUrl + "/sharing").then(
                     function () {
@@ -154,15 +150,10 @@
                     window.location.reload();
                 });
 
-                map = new Map("map", {
-                    basemap: "gray",
-                    center: [-46.807, 32.553],
-                    zoom: 4
-                });
+                map = new Map("map", { basemap: "gray", center: [-46.807, 32.553], zoom: 4 });
 
                 function addLayers() {
-                    featureLayer = new FeatureLayer("https://bankbeetle.esri.com/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1");
-                    //featureLayer.on('load', queryFeatures());
+                    featureLayer = new FeatureLayer(arcgisDomain + "/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1");
                     featureLayer.on('load', queryFeatures());
                 }
 
@@ -186,8 +177,8 @@
                         "xmin": res.extent.xmin, "ymin": res.extent.ymin, "xmax": res.extent.xmax, "ymax": res.extent.ymax,
                         "spatialReference": { "wkid": 4326 }
                     });
-                    console.log("extent",extent);
-                    console.log("normal",extent.normalize());
+                    console.log("extent", extent);
+                    console.log("normal", extent.normalize());
                     var sfs = getFillSymbol();
                     var graphic = new Graphic(extent, sfs);
                     graphicLayer.add(graphic);
@@ -255,7 +246,7 @@
                     requestHandle.then(requestSucceeded, requestFailed);
                 }
 
-                function calcMaxOffset(){
+                function calcMaxOffset() {
                     var mapContainer = dom.byId("map");
                     var maxAllowableOffset = Math.sqrt(map.extent.getWidth() / mapContainer.width * map.extent.getHeight() / mapContainer.height);
                     //snap maxAllowableOffset to powers of 2 thus accepting a range of 0.5 px to 2 px between adjacent vertices
@@ -293,6 +284,18 @@
                     point.x = xMid;
                     point.y = yMid;
                     point.spatialReference = map.spatialReference;
+                }
+
+                function useCrystalBugger() {
+                    arcgisDomain = "http://crystalbugger.esri.com";
+                    arcgisPortal = arcgisDomain + '/arcgis';
+                    appId = vVlLOA5bg05fnt9d;
+                }
+
+                function useBankBeetle() {
+                    arcgisDomain = "http://bankbeetle.esri.com";
+                    arcgisPortal = arcgisDomain + '/portal';
+                    appId = r39INBsvcaokxCns;
                 }
 
                 function drawExtent() {
