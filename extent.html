@@ -178,7 +178,7 @@
 
                     //var extent = new Extent(JSON.stringify(res.extent));
                     var extent = new esri.geometry.Extent({
-                        "xmin": -122.68, "ymin": 45.53, "xmax": -122.45, "ymax": 45.6,
+                        "xmin": res.extent.xmin, "ymin": res.extent.ymin, "xmax": res.extent.xmax, "ymax": res.extent.ymax,
                         "spatialReference": { "wkid": 4326 }
                     });
                     var sfs = getFillSymbol();
