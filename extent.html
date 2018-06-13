@@ -184,6 +184,8 @@
                         "xmin": res.extent.xmin, "ymin": res.extent.ymin, "xmax": res.extent.xmax, "ymax": res.extent.ymax,
                         "spatialReference": { "wkid": 4326 }
                     });
+                    console.log("extent",extent);
+                    console.log("normal",extent.normalize());
                     var sfs = getFillSymbol();
                     var graphic = new Graphic(extent, sfs);
                     graphicLayer.add(graphic);
