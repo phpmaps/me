@@ -115,7 +115,7 @@
         ) {
                 useCrystalBugger()
                 esri.config.defaults.io.corsEnabledServers.push(arcgisDomain);
-                var info = new OAuthInfo({ appId: "r39INBsvcaokxCns", popup: false, portalUrl: arcgisPortal });
+                var info = new OAuthInfo({ appId: appId, popup: false, portalUrl: arcgisPortal });
                 esriId.registerOAuthInfos([info]);
                 esriId.checkSignInStatus(info.portalUrl + "/sharing").then(
                     function () {
