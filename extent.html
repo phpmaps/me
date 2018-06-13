@@ -128,7 +128,9 @@
                                 domAttr.set("userId", "innerHTML", portalUser.fullName);
                                 domStyle.set("anonymous", "display", "none");
                                 domStyle.set("personalized", "display", "block");
+                                addGraphicsLayer();
                                 addLayers();
+                                dataExtent();
                             }
                         );
                     }
@@ -208,10 +210,30 @@
 
                 }
 
-                function queryFeatures() {
+                function addGraphicsLayer(){
                     graphicLayer = new GraphicsLayer();
                     map.addLayer(graphicLayer);
-                    console.log("featureLayer", featureLayer);
+                }
+
+                function dataExtent(){
+                    var params = {
+                        objectIds: "1,2,3",
+                        outFields: ["*"],
+                        returnExtentOnly: true,
+                        f: "json"
+                    };
+                    var requestHandle = esriRequest({
+                        url: featureLayer.url + '/query',
+                        content: params,
+                        handleAs: "json",
+                    }, {
+                            usePost: false
+                        });
+
+                    requestHandle.then(requestSucceeded, requestFailed);
+                }
+
+                function queryFeatures() {
                     var oids = [1, 2, 3];
                     for (var i = 0; i < oids.length; i++) {
                         queryFeature(oids[i]);
