@@ -130,8 +130,10 @@
                                 domStyle.set("personalized", "display", "block");
                                 addGraphicsLayer();
                                 addLayers();
-                                dataExtent();
+                                //dataExtent();
                                 featuresExtent();
+                                calcMaxOffset();
+
                             }
                         );
                     }
@@ -251,6 +253,15 @@
                         });
 
                     requestHandle.then(requestSucceeded, requestFailed);
+                }
+
+                function calcMaxOffset(){
+                    var mapContainer = dom.byId("map");
+                    var maxAllowableOffset = Math.sqrt(map.extent.getWidth() / mapContainer.width * map.extent.getHeight() / mapContainer.height);
+                    //snap maxAllowableOffset to powers of 2 thus accepting a range of 0.5 px to 2 px between adjacent vertices
+                    //snapping is needed for better caching on all levels: JS memory cache, HTTP cache, server-side cache
+                    maxAllowableOffset = Math.pow(2, Math.round(Math.log2(maxAllowableOffset)));
+                    console.log(maxAllowableOffset)
                 }
 
                 function queryFeatures() {
