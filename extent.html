@@ -514,7 +514,7 @@
                     map.on('load', addData());
                 }
 
-                function addData() {
+                async function addData() {
                     featureLayer = new FeatureLayer(arcgisDomain + catalog + dataset, {
                         mode: FeatureLayer.MODE_SNAPSHOT,
                         outFields: ["objectid"]
