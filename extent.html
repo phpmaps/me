@@ -651,7 +651,7 @@
                     }
                     var hull = geometryEngine.convexHull(centerPts, true);
                     //var trans = projection.getTransformation(hull[0].spatialReference, map.spatialReference, hull[0].getExtent());
-                    hull = projection.project(hull[0], map.spatialReference, trans);
+                    hull = projection.project(hull[0], map.spatialReference);
                     map.setExtent(hull.getExtent());
                 }
 
