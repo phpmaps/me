@@ -514,13 +514,13 @@
                     map.on('load', addData());
                 }
 
-                async function addData() {
+                function addData() {
                     featureLayer = new FeatureLayer(arcgisDomain + catalog + dataset, {
                         mode: FeatureLayer.MODE_SNAPSHOT,
                         outFields: ["objectid"]
                     });
 
-                    featureLayer.on('load', function () {
+                    featureLayer.on('load', async function () {
                         extent = await calculateExtent();
                         var e = extent;
                         console.log("extent:", extent);
