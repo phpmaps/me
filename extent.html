@@ -654,7 +654,7 @@
                     map.setExtent(geom.getExtent());
                 }
 
-                function webAssemblyProjection(geom, outSpat) {
+                async function webAssemblyProjection(geom, outSpat) {
                     if (!projection.isSupported()) {
                         console.log("Web Assembly not supported on this browser (<=IE11), do geom service");
                         //// Project w/ geometry service
