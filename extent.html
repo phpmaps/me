@@ -414,6 +414,7 @@
             "esri/request",
             "esri/geometry/Extent",
             "esri/SpatialReference",
+            "esri/geometry/geometryEngine",
             "dojo/domReady!"
         ], function (
             Map,
@@ -438,7 +439,10 @@
             dom,
             Query,
             arcgisUtils,
-            esriRequest
+            esriRequest,
+            Extent,
+            SpatialReference,
+            geometryEngine
         ) {
                 useCrystalBugger();
                 function useBankBeetle() {
@@ -632,20 +636,24 @@
                 }
 
                 function drawFeatures(featureSet) {
+                    var centerPts = [];
                     for (var i = 0; i < featureSet.features.length; i++) {
                         var feature = featureSet.features[i];
                         var sfs = getFillSymbol();
                         //feature.geometry.spatialReference = {"wkid":4326 };
                         var json = feature.geometry;
                         var poly = new Polygon(json);
+                        centerPts.push(getCenterPoint(poly.getExtent(), new Point()));
                         var g = new Graphic(poly, sfs);
                         map.graphics.add(g);
                     }
+                    var hull = geometryEngine.convexHull(centerPts, true);
+                    map.setExtent(hull.getExtent());
                 }
 
-                function centerPoint(featureExtent, point) {
-                    var xMid = (featureExtent.xmin + featureExtent.xmax) / 2;
-                    var yMid = (featureExtent.ymin + featureExtent.ymax) / 2;
+                function getCenterPoint(geoExtent, point) {
+                    var xMid = (geoExtent.xmin + geoExtent.xmax) / 2;
+                    var yMid = (geoExtent.ymin + geoExtent.ymax) / 2;
                     point.x = xMid;
                     point.y = yMid;
                     point.spatialReference = map.spatialReference;
