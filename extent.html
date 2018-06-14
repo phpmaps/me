@@ -662,7 +662,7 @@
                         //// Project w/ geometry service
                     }
                     return projection.load().then(function (){
-                        projection.project(geom, outSpat);
+                        return projection.project(geom, outSpat);
                     }); 
                 }
 
