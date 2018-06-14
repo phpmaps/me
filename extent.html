@@ -634,10 +634,8 @@
                 function drawFeatures(featureSet) {
                     for (var i = 0; i < featureSet.features.length; i++) {
                         var feature = featureSet.features[i];
-                        var poly = new Polygon();
-                        poly = feature.geometry;
                         var sfs = getFillSymbol();
-                        var g = new Graphic(poly, sfs);
+                        var g = new Graphic(feature.geometry, sfs);
                         map.graphics.add(g);
                     }
                 }
