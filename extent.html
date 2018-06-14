@@ -415,6 +415,7 @@
             "esri/geometry/Extent",
             "esri/SpatialReference",
             "esri/geometry/geometryEngine",
+            "esri/geometry/projection",
             "dojo/domReady!"
         ], function (
             Map,
@@ -442,7 +443,8 @@
             esriRequest,
             Extent,
             SpatialReference,
-            geometryEngine
+            geometryEngine,
+            projection
         ) {
                 useCrystalBugger();
                 function useBankBeetle() {
@@ -648,6 +650,7 @@
                         map.graphics.add(g);
                     }
                     var hull = geometryEngine.convexHull(centerPts, true);
+                    hull = projection.project(hull, map.spatialReference);
                     map.setExtent(hull.getExtent());
                 }
 
@@ -656,7 +659,7 @@
                     var yMid = (geoExtent.ymin + geoExtent.ymax) / 2;
                     point.x = xMid;
                     point.y = yMid;
-                    point.spatialReference = map.spatialReference;
+                    point.spatialReference = geoExtent.spatialReference;
                     return point;
                 }
 
