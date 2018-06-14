@@ -635,7 +635,7 @@
                         var feature = featureSet.features[i];
                         var sfs = getFillSymbol();
                         //feature.geometry.spatialReference = {"wkid":4326 };
-                        var json = JSON.stringify(feature.geometry);
+                        var json = feature.geometry;
                         var poly = new Polygon(json);
                         var g = new Graphic(poly, sfs);
                         map.graphics.add(g);
