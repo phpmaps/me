@@ -525,7 +525,7 @@
                     var maxAllowableOffset = Math.sqrt(map.extent.getWidth() / mapContainer.getBoundingClientRect().width * map.extent.getHeight() / mapContainer.getBoundingClientRect().height);
                     //snap maxAllowableOffset to powers of 2 thus accepting a range of 0.5 px to 2 px between adjacent vertices
                     //snapping is needed for better caching on all levels: JS memory cache, HTTP cache, server-side cache
-                    maxAllowableOffset = Math.pow(2, Math.round(Math.log2(maxAllowableOffset)));
+                    maxAllowableOffset = Math.pow(6, Math.round(Math.log2(maxAllowableOffset)));
                     console.log(maxAllowableOffset)
                 }
 
