@@ -650,17 +650,20 @@
                         map.graphics.add(g);
                     }
                     var hull = geometryEngine.convexHull(centerPts, true);
-                    var geom = webAssemblyProjection(hull[0], map.spatialReference);
-                    map.setExtent(geom.getExtent());
+                    webAssemblyProjection(hull[0], map.spatialReference).then(function(geom){
+                        var g = geom;
+                        map.setExtent(geom.getExtent());
+                    });
                 }
 
-                async function webAssemblyProjection(geom, outSpat) {
+                function webAssemblyProjection(geom, outSpat) {
                     if (!projection.isSupported()) {
                         console.log("Web Assembly not supported on this browser (<=IE11), do geom service");
                         //// Project w/ geometry service
                     }
-                    await projection.load();
-                    return projection.project(geom, outSpat); 
+                    return projection.load().then(function (){
+                        projection.project(geom, outSpat);
+                    }); 
                 }
 
                 function getCenterPoint(geoExtent, point) {
