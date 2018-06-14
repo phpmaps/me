@@ -387,7 +387,10 @@
     </script>
     <script src="https://jsdev.arcgis.com/3.25/"></script>
     <script>
-        var map, graphicLayer, featureLayer, arcgisDomain, arcgisPortalUrl, appId;
+        var map, graphicLayer, featureLayer, arcgisDomain, arcgisPortalUrl, appId, catalog, dataset;
+        catalog = "/arcgis/rest/services";
+        dataset = "/Hosted/USA_Boundaries_2015/FeatureServer/1";
+
         require([
             "esri/map",
             "esri/layers/FeatureLayer",
@@ -447,6 +450,8 @@
             projection
         ) {
                 useCrystalBugger();
+                attachToPortal();
+
                 function useBankBeetle() {
                     arcgisDomain = "https://bankbeetle.esri.com";
                     arcgisPortalUrl = arcgisDomain + '/portal';
@@ -459,61 +464,89 @@
                     appId = "vVlLOA5bg05fnt9d";
                 }
 
-                esri.config.defaults.io.corsEnabledServers.push(arcgisDomain);
-                var info = new OAuthInfo({
-                    appId: appId,
-                    popup: false,
-                    portalUrl: arcgisPortalUrl
-                });
+                function attachToPortal() {
+                    esri.config.defaults.io.corsEnabledServers.push(arcgisDomain);
+                    var info = new OAuthInfo({
+                        appId: appId,
+                        popup: false,
+                        portalUrl: arcgisPortalUrl
+                    });
+                    esriId.registerOAuthInfos([info]);
+                    console.log(info);
+                    esriId.checkSignInStatus(info.portalUrl + "/sharing").then(
+                        function () {
+                            new arcgisPortal.Portal(info.portalUrl).signIn().then(
+                                function (portalUser) {
+                                    domAttr.set("userId", "innerHTML", portalUser.fullName);
+                                    domStyle.set("anonymous", "display", "none");
+                                    domStyle.set("personalized", "display", "block");
+                                    createMap();
+                                    //addGraphicsLayer();
+                                    //addLayers();
+                                    //calcMaxOffset();
+                                }
+                            );
+                        }
+                    ).otherwise(
+                        function () {
+                            domStyle.set("anonymous", "display", "block");
+                            domStyle.set("personalized", "display", "none");
+                        }
+                    );
 
-                esriId.registerOAuthInfos([info]);
-                console.log(info);
-                esriId.checkSignInStatus(info.portalUrl + "/sharing").then(
-                    function () {
-                        new arcgisPortal.Portal(info.portalUrl).signIn().then(
-                            function (portalUser) {
-                                domAttr.set("userId", "innerHTML", portalUser.fullName);
-                                domStyle.set("anonymous", "display", "none");
-                                domStyle.set("personalized", "display", "block");
-                                addGraphicsLayer();
-                                addLayers();
-                                //dataExtent();
-                                //featuresExtent();
-                                calcMaxOffset();
+                    on(dom.byId("sign-in"), "click", function () {
+                        console.log("sign-in");
+                        esriId.getCredential(info.portalUrl + "/sharing");
+                    });
 
-                            }
-                        );
-                    }
-                ).otherwise(
-                    function () {
-                        domStyle.set("anonymous", "display", "block");
-                        domStyle.set("personalized", "display", "none");
-                    }
-                );
+                    on(dom.byId("sign-out"), "click", function () {
+                        esriId.destroyCredentials();
+                        window.location.reload();
+                    });
+                }
 
-                on(dom.byId("sign-in"), "click", function () {
-                    console.log("sign-in");
-                    esriId.getCredential(info.portalUrl + "/sharing");
-                });
+                function createMap() {
+                    map = new Map("map", {
+                        basemap: "gray",
+                        center: [-46.807, 32.553],
+                        zoom: 4
+                    });
+                    map.on('load', addData());
+                }
 
-                on(dom.byId("sign-out"), "click", function () {
-                    esriId.destroyCredentials();
-                    window.location.reload();
-                });
-
-                map = new Map("map", {
-                    basemap: "gray",
-                    center: [-46.807, 32.553],
-                    zoom: 4
-                });
-
-                function addLayers() {
-                    featureLayer = new FeatureLayer(arcgisDomain + "/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1", {
+                function addData() {
+                    featureLayer = new FeatureLayer(arcgisDomain + catalog + dataset, {
                         mode: FeatureLayer.MODE_SNAPSHOT,
                         outFields: ["objectid"]
                     });
-                    //featureLayer.on('load', queryFeatures());
-                    featureLayer.on('load', queryFeatures());
+
+                    featureLayer.on('load', function () {
+                        extent = await calculateExtent();
+                        var e = extent;
+                        console.log("extent:", extent);
+                    });
+                }
+
+                async function calcuateExtent() {
+                    async function getOids() {
+                        return new Promise(function (resolve, reject) {
+                            var params = {
+                                returnIdsOnly: true,
+                                f: "json"
+                            };
+                            return esriRequest({
+                                url: featureLayer.url + '/query',
+                                content: params,
+                                handleAs: "json",
+                            }, { usePost: false }).then(function (resp) {
+                                resolve(resp);
+                            }, function (err) {
+                                reject(err);
+                            });
+                        });
+                    }
+                    var oids = await getOids();
+                    return oids;
                 }
 
                 function getFillSymbol() {
@@ -650,7 +683,7 @@
                         map.graphics.add(g);
                     }
                     var hull = geometryEngine.convexHull(centerPts, true);
-                    webAssemblyProjection(hull[0], map.spatialReference).then(function(geom){
+                    webAssemblyProjection(hull[0], map.spatialReference).then(function (geom) {
                         var g = geom;
                         map.setExtent(geom.getExtent());
                     });
@@ -661,9 +694,9 @@
                         console.log("Web Assembly not supported on this browser (<=IE11), do geom service");
                         //// Project w/ geometry service
                     }
-                    return projection.load().then(function (){
+                    return projection.load().then(function () {
                         return projection.project(geom, outSpat);
-                    }); 
+                    });
                 }
 
                 function getCenterPoint(geoExtent, point) {
