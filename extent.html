@@ -649,7 +649,7 @@
                         var g = new Graphic(poly, sfs);
                         map.graphics.add(g);
                     }
-                    var hull = geometryEngine.convexHull(centerPts, false);
+                    var hull = geometryEngine.convexHull(centerPts, true);
                     hull = projection.project(hull, map.spatialReference);
                     map.setExtent(hull.getExtent());
                 }
