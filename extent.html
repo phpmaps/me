@@ -472,14 +472,13 @@
                         portalUrl: arcgisPortalUrl
                     });
                     esriId.registerOAuthInfos([info]);
-                    console.log(info);
                     esriId.checkSignInStatus(info.portalUrl + "/sharing").then(
                         function () {
                             new arcgisPortal.Portal(info.portalUrl).signIn().then(
                                 function (portalUser) {
-                                    domAttr.set("userId", "innerHTML", portalUser.fullName);
-                                    domStyle.set("anonymous", "display", "none");
-                                    domStyle.set("personalized", "display", "block");
+                                    // domAttr.set("userId", "innerHTML", portalUser.fullName);
+                                    // domStyle.set("anonymous", "display", "none");
+                                    // domStyle.set("personalized", "display", "block");
                                     createMap();
                                     //addGraphicsLayer();
                                     //addLayers();
@@ -487,22 +486,18 @@
                                 }
                             );
                         }
-                    ).otherwise(
-                        function () {
-                            domStyle.set("anonymous", "display", "block");
-                            domStyle.set("personalized", "display", "none");
-                        }
                     );
+                    esriId.getCredential(info.portalUrl + "/sharing");
 
-                    on(dom.byId("sign-in"), "click", function () {
-                        console.log("sign-in");
-                        esriId.getCredential(info.portalUrl + "/sharing");
-                    });
+                    // on(dom.byId("sign-in"), "click", function () {
+                    //     console.log("sign-in");
+                    //     esriId.getCredential(info.portalUrl + "/sharing");
+                    // });
 
-                    on(dom.byId("sign-out"), "click", function () {
-                        esriId.destroyCredentials();
-                        window.location.reload();
-                    });
+                    // on(dom.byId("sign-out"), "click", function () {
+                    //     esriId.destroyCredentials();
+                    //     window.location.reload();
+                    // });
                 }
 
                 function createMap() {
@@ -544,7 +539,7 @@
                             content: params,
                             handleAs: "json",
                         }, { usePost: false }).then(function (resp) {
-                            resolve(resp);
+                            resolve(resp.objectIds);
                         }, function (err) {
                             reject(err);
                         });
