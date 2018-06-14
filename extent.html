@@ -528,25 +528,26 @@
                 }
 
                 async function calculateExtent() {
-                    async function getOids() {
-                        new Promise(function (resolve, reject) {
-                            var params = {
-                                returnIdsOnly: true,
-                                f: "json"
-                            };
-                            return esriRequest({
-                                url: featureLayer.url + '/query',
-                                content: params,
-                                handleAs: "json",
-                            }, { usePost: false }).then(function (resp) {
-                                resolve(resp);
-                            }, function (err) {
-                                reject(err);
-                            });
-                        });
-                    }
                     var oids = await getOids();
                     return oids;
+                }
+
+                async function getOids() {
+                    return new Promise(function (resolve, reject) {
+                        var params = {
+                            returnIdsOnly: true,
+                            f: "json"
+                        };
+                        return esriRequest({
+                            url: featureLayer.url + '/query',
+                            content: params,
+                            handleAs: "json",
+                        }, { usePost: false }).then(function (resp) {
+                            resolve(resp);
+                        }, function (err) {
+                            reject(err);
+                        });
+                    });
                 }
 
                 function getFillSymbol() {
