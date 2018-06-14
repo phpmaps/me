@@ -650,7 +650,8 @@
                         map.graphics.add(g);
                     }
                     var hull = geometryEngine.convexHull(centerPts, true);
-                    hull = projection.project(hull[0], map.spatialReference, null);
+                    var trans = projection.getTransformation(hull.spatialReference, map.spatialReference, hull.getExtent());
+                    hull = projection.project(hull[0], map.spatialReference, trans);
                     map.setExtent(hull.getExtent());
                 }
 
