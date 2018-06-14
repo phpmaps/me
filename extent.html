@@ -470,11 +470,10 @@
                                 domStyle.set("anonymous", "display", "none");
                                 domStyle.set("personalized", "display", "block");
                                 addGraphicsLayer();
-                                //addLayers();
+                                addLayers();
                                 //dataExtent();
                                 //featuresExtent();
                                 calcMaxOffset();
-                                queryFeatures();
 
                             }
                         );
@@ -505,7 +504,7 @@
                 function addLayers() {
                     featureLayer = new FeatureLayer(arcgisDomain + "/arcgis/rest/services/Hosted/USA_Boundaries_2015/FeatureServer/1", {
                         mode: FeatureLayer.MODE_SNAPSHOT,
-                        outFields: ["*"]
+                        outFields: ["objectid"]
                     });
                     //featureLayer.on('load', queryFeatures());
                     featureLayer.on('load', queryFeatures());
