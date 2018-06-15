@@ -500,7 +500,7 @@
                     var centerPoints = getCenterPoints(fs);
                     var hull = geometryEngine.convexHull(centerPoints, true);
                     var newExtent = await webAssemblyProjection(hull[0], map.spatialReference)
-                    return newExtent;
+                    return newExtent.getExtent();
                 }
 
                 async function getOids() {
