@@ -486,10 +486,12 @@
                 map.on('load', addData);
 
                 function addData() {
+                    addGraphicsLayer();
                     featureLayer = new FeatureLayer(arcgisDomain + catalog + dataset);
                     featureLayer.on('load', async function () {
                         var extent = await getExtent();
                         map.setExtent(extent);
+                        drawExtent(extent);
                         console.log("extent:", extent);
                     });
                 }
@@ -541,6 +543,7 @@
                         centerPoints.push(p);
                         i++;
                     }
+                    drawPoints(centerPoints);
                     return centerPoints;
                 }
 
@@ -583,6 +586,47 @@
                             reject(err);
                         });
                     });
+                }
+
+                function getFillSymbol() {
+                    var r = Math.floor(Math.random() * 250);
+                    var g = Math.floor(Math.random() * 100);
+                    var b = Math.floor(Math.random() * 100);
+                    return new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
+                        new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                            new Color([r, g, b]), 1), new Color([r, g, b, 0.25])
+                    );
+                }
+
+                function getMarkerSymbol() {
+                    var r = Math.floor(Math.random() * 250);
+                    var g = Math.floor(Math.random() * 100);
+                    var b = Math.floor(Math.random() * 100);
+                    return new SimpleMarkerSymbol(SimpleMarkerSymbol.STYLE_CIRCLE, 10,
+                        new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                            new Color([r, g, b]), 1), new Color([r, g, b, 0.25])
+                    );
+                }
+
+                function drawPoints(points){
+                    for(i=0; i<points.length; i++){
+                        var point = points[i];
+                        var sms = getMarkerSymbol();
+                        var graphic = new Graphic(extent, sms);
+                        graphicLayer.add(graphic);
+                        i++;
+                    }   
+                }
+
+                function drawExtent(extent){
+                    var sfs = getFillSymbol();
+                    var graphic = new Graphic(extent, sfs);
+                    graphicLayer.add(graphic);
+                }
+
+                function addGraphicsLayer() {
+                    graphicLayer = new GraphicsLayer();
+                    map.addLayer(graphicLayer);
                 }
 
                 // function getRandom(max) {
