@@ -20,6 +20,7 @@ require([
     "esri/geometry/geometryEngine",
     "esri/geometry/projection",
     "esri/geometry/webMercatorUtils",
+    "dojo/dom",
     "dojo/domReady!"
 ], function (
     Map,
@@ -38,7 +39,8 @@ require([
     esriRequest,
     geometryEngine,
     projection,
-    webMercatorUtils
+    webMercatorUtils,
+    dom
 ) {
         useCrystalBugger();
 
