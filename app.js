@@ -22,6 +22,7 @@ require([
     "esri/geometry/projection",
     "esri/geometry/webMercatorUtils",
     "dojo/dom",
+    "esri/SpatialReference",
     "dojo/domReady!"
 ], function (
     Map,
@@ -42,7 +43,8 @@ require([
     geometryEngine,
     projection,
     webMercatorUtils,
-    dom
+    dom,
+    SpatialReference
 ) {
         useCrystalBugger();
 
@@ -259,7 +261,8 @@ require([
                 }
             };
             var extent = new Extent(ext);
-            console.log(extent);
+            newGeom = webAssemblyProjection(ext, new SpatialReference({"wkid": 4326}));
+            console.log(newGeom);
 
         }
     });
