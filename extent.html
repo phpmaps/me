@@ -574,7 +574,7 @@
                         } else {
                             sampleOids = oids;
                         }
-                        params.objectIds = sampleOids;
+                        params.objectIds = sampleOids.join();
                         return esriRequest({
                             url: featureLayer.url + '/query',
                             content: params,
