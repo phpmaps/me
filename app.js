@@ -7,6 +7,7 @@ require([
     "esri/layers/FeatureLayer",
     "esri/geometry/Point",
     "esri/geometry/Polygon",
+    "esri/geometry/Extent",
     "esri/graphic",
     "esri/layers/GraphicsLayer",
     "esri/symbols/SimpleMarkerSymbol",
@@ -27,6 +28,7 @@ require([
     FeatureLayer,
     Point,
     Polygon,
+    Extent,
     Graphic,
     GraphicsLayer,
     SimpleMarkerSymbol,
@@ -80,6 +82,7 @@ require([
             map.on("mouse-move", showCoordinates);
             map.on("mouse-drag", showCoordinates);
             addData();
+            projectThis();
         });
 
         function addData() {
@@ -242,5 +245,21 @@ require([
             var mp = webMercatorUtils.webMercatorToGeographic(evt.mapPoint);
             //display mouse coordinates
             dom.byId("info").innerHTML = mp.x.toFixed(3) + ", " + mp.y.toFixed(3);
+        }
+
+        function projectThis() {
+            var ext = {
+                "xmin": -19839092.304288119,
+                "ymin": 2145729.6799177886,
+                "xmax": -7454985.1465167394,
+                "ymax": 11542624.916041069,
+                "spatialReference": {
+                    "wkid": 102100,
+                    "latestWkid": 3857
+                }
+            };
+            var extent = new Extent(ext);
+            console.log(extent);
+
         }
     });
