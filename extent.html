@@ -328,7 +328,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
     <title>Extent</title>
     <link rel="stylesheet" href="https://js.arcgis.com/3.25/esri/themes/calcite/dijit/calcite.css">
     <link rel="stylesheet" href="https://js.arcgis.com/3.25/esri/css/esri.css">
@@ -336,10 +336,10 @@
         html,
         body,
         #map {
-            height: 100%;
-            width: 100%;
             margin: 0;
             padding: 0;
+            height: 100%;
+            width: 100%;
         }
 
         .toolbar {
@@ -450,8 +450,6 @@
             projection
         ) {
                 useCrystalBugger();
-                createMap();
-
 
                 function useBankBeetle() {
                     arcgisDomain = "https://bankbeetle.esri.com";
@@ -476,7 +474,6 @@
                     function () {
                         new arcgisPortal.Portal(info.portalUrl).signIn().then(
                             function (portalUser) {
-                                createMap();
                                 // domAttr.set("userId", "innerHTML", portalUser.fullName);
                                 // domStyle.set("anonymous", "display", "none");
                                 // domStyle.set("personalized", "display", "block");
@@ -488,6 +485,7 @@
                     }
                 );
 
+                createMap();
 
                 function createMap() {
                     map = new Map("map", {
@@ -702,20 +700,7 @@
 </head>
 
 <body class="calcite">
-
-    <!-- <div class="toolbar">
-        <div id="anonymous">
-            <span id="sign-in" class="action">Sign In</span>
-        </div>
-        <div id="personalized">Welcome
-            <span id="userId"></span>
-            <span id="sign-out" class="action"> Sign Out</span>
-        </div>
-    </div> -->
-
-
     <div id="map"></div>
-
 </body>
 
 </html>
