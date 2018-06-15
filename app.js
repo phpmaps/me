@@ -136,12 +136,13 @@ require([
                 var feat = fs.features[i];
                 //Should first check if polygon or line, but doing that now
                 var geo = new Polygon(feat.geometry);
-                console.log(feat.attributes["st_abbrev"], geo.normalize().length);
+                //console.log(feat.attributes["st_abbrev"], geo.normalize().length);
                 if(feat.attributes["st_abbrev"] === "AK"){
                     var a = geo.getExtent();
                     var b = getCenter(geo.getExtent());
                     console.log("a-extent", a);
                     console.log("b-point", b);
+                    console.log("b-point-centroid", geo.getCentroid());
                 }
                 var p = getCenter(geo.getExtent());
                 centerPoints.push(p);
