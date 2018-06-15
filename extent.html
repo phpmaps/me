@@ -541,7 +541,6 @@
                         var geo = new Polygon(feat.geometry);
                         var p = getCenter(geo.getExtent());
                         centerPoints.push(p);
-                        i++;
                     }
                     drawPoints(centerPoints);
                     return centerPoints;
@@ -570,7 +569,6 @@
                         if (oids.length > featureLayer.maxRecordCount) {
                             for (var i = 0; i < featureLayer.maxRecordCount; i++) {
                                 sampleOids.push(oids[getRandom(oids.length)]);
-                                i++;
                             }
                         } else {
                             sampleOids = oids;
@@ -614,7 +612,6 @@
                         var sms = getMarkerSymbol();
                         var graphic = new Graphic(point, sms);
                         graphicLayer.add(graphic);
-                        i++;
                     }   
                 }
 
