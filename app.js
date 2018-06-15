@@ -250,6 +250,8 @@ require([
         }
 
         function projectThis() {
+            //It appears a map services full extent and initial extent may be different from the item's extent
+            //Sudo code to confirm.  Clearly spatial refs are different.
             var ext = {
                 "xmin": -19839092.304288119,
                 "ymin": 2145729.6799177886,
@@ -261,7 +263,7 @@ require([
                 }
             };
             var extent = new Extent(ext);
-            newGeom = webAssemblyProjection(ext, new SpatialReference({"wkid": 4326}));
+            newGeom = webAssemblyProjection(extent, new SpatialReference({"wkid": 4326}));
             console.log(newGeom);
 
         }
