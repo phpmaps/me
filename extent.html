@@ -541,7 +541,7 @@
                         var feat = fs.features[i];
                         //Should first check if polygon or line
                         var geo = new Polygon(feat.geometry);
-                        var p = getCenter(geo.geometry.getExtent());
+                        var p = getCenter(geo.getExtent());
                         centerPoints.push(p);
                         i++;
                     }
