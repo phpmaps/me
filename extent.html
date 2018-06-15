@@ -568,7 +568,8 @@
                         };
                         if (oids.length > featureLayer.maxRecordCount) {
                             for (var i = 0; i < featureLayer.maxRecordCount; i++) {
-                                sampleOids.push(oids[getRandom(oids.length)])
+                                sampleOids.push(oids[getRandom(oids.length)]);
+                                i++;
                             }
                         } else {
                             sampleOids = oids;
