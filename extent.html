@@ -486,19 +486,15 @@
                 map.on('load', addData);
 
                 function addData() {
-                    featureLayer = new FeatureLayer(arcgisDomain + catalog + dataset, {
-                        mode: FeatureLayer.MODE_SNAPSHOT,
-                        outFields: ["objectid"]
-                    });
+                    featureLayer = new FeatureLayer(arcgisDomain + catalog + dataset);
                     featureLayer.on('load', async function () {
-                        var extent = await calculateExtent();
-                        var e = extent;
+                        var extent = await getExtent();
+                        map.setExtent(extent);
                         console.log("extent:", extent);
-                        console.log("extent:", extent[4]);
                     });
                 }
 
-                async function calculateExtent() {
+                async function getExtent() {
                     var oids = await getOids();
                     var fs = await sampleData(oids);
                     var centerPoints = getCenterPoints(fs);
@@ -539,7 +535,7 @@
                     }
                     for (var i = 0; i < fs.features.length; i++) {
                         var feat = fs.features[i];
-                        //Should first check if polygon or line
+                        //Should first check if polygon or line, but doing that now
                         var geo = new Polygon(feat.geometry);
                         var p = getCenter(geo.getExtent());
                         centerPoints.push(p);
