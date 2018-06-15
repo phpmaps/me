@@ -12,22 +12,11 @@ require([
     "esri/symbols/SimpleMarkerSymbol",
     "esri/symbols/SimpleFillSymbol",
     "esri/symbols/SimpleLineSymbol",
-    "esri/SpatialReference",
     "esri/Color",
-    "esri/InfoTemplate",
-    "dojo/on",
-    "dojo/_base/array",
     "esri/arcgis/Portal",
     "esri/arcgis/OAuthInfo",
     "esri/IdentityManager",
-    "dojo/dom-style",
-    "dojo/dom-attr",
-    "dojo/dom",
-    "esri/tasks/query",
-    "esri/arcgis/utils",
     "esri/request",
-    "esri/geometry/Extent",
-    "esri/SpatialReference",
     "esri/geometry/geometryEngine",
     "esri/geometry/projection",
     "dojo/domReady!"
@@ -41,22 +30,11 @@ require([
     SimpleMarkerSymbol,
     SimpleFillSymbol,
     SimpleLineSymbol,
-    SpatialReference,
     Color,
-    InfoTemplate,
-    on,
-    array,
     arcgisPortal,
     OAuthInfo,
     esriId,
-    domStyle,
-    domAttr,
-    dom,
-    Query,
-    arcgisUtils,
     esriRequest,
-    Extent,
-    SpatialReference,
     geometryEngine,
     projection
 ) {
@@ -102,7 +80,7 @@ require([
             featureLayer.on('load', async function () {
                 var extent = await getExtent();
                 map.setExtent(extent);
-                drawExtent(extent);
+                drawPoly(extent);
                 console.log("extent:", extent);
             });
         }
@@ -190,6 +168,12 @@ require([
                     content: params,
                     handleAs: "json",
                 }, { usePost: false }).then(function (resp) {
+                    for (var i = 0; i < resp.features.length; i++) {
+                        var feat = resp.features[i];
+                        //Should first check if polygon or line, but doing that now
+                        var geo = new Polygon(feat.geometry);
+                        drawPoly(geo);
+                    }
                     resolve(resp);
                 }, function (err) {
                     reject(err);
@@ -226,9 +210,9 @@ require([
             }
         }
 
-        function drawExtent(extent) {
+        function drawPoly(poly) {
             var sfs = getFillSymbol();
-            var graphic = new Graphic(extent, sfs);
+            var graphic = new Graphic(poly, sfs);
             graphicLayer.add(graphic);
         }
 
