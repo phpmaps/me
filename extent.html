@@ -451,7 +451,7 @@
         ) {
                 useCrystalBugger();
                 attachToPortal();
-                
+
 
                 function useBankBeetle() {
                     arcgisDomain = "https://bankbeetle.esri.com";
@@ -465,40 +465,34 @@
                     appId = "vVlLOA5bg05fnt9d";
                 }
 
-                function attachToPortal() {
-                    esri.config.defaults.io.corsEnabledServers.push(arcgisDomain);
-                    var info = new OAuthInfo({
-                        appId: appId,
-                        popup: false,
-                        portalUrl: arcgisPortalUrl
-                    });
-                    esriId.registerOAuthInfos([info]);
-                    esriId.checkSignInStatus(info.portalUrl + "/sharing").then(
-                        function () {
-                            new arcgisPortal.Portal(info.portalUrl).signIn().then(
-                                function (portalUser) {
-                                    createMap();
-                                    // domAttr.set("userId", "innerHTML", portalUser.fullName);
-                                    // domStyle.set("anonymous", "display", "none");
-                                    // domStyle.set("personalized", "display", "block");
-                                    //addGraphicsLayer();
-                                    //addLayers();
-                                    //calcMaxOffset();
-                                }
-                            );
-                        }
-                    );
-                    //esriId.getCredential(info.portalUrl + "/sharing");
+                esri.config.defaults.io.corsEnabledServers.push(arcgisDomain);
+                var info = new OAuthInfo({
+                    appId: appId,
+                    popup: false,
+                    portalUrl: arcgisPortalUrl
+                });
+                esriId.registerOAuthInfos([info]);
+                esriId.checkSignInStatus(info.portalUrl + "/sharing").then(
+                    function () {
+                        new arcgisPortal.Portal(info.portalUrl).signIn().then(
+                            function (portalUser) {
+                                createMap();
+                                // domAttr.set("userId", "innerHTML", portalUser.fullName);
+                                // domStyle.set("anonymous", "display", "none");
+                                // domStyle.set("personalized", "display", "block");
+                                //addGraphicsLayer();
+                                //addLayers();
+                                //calcMaxOffset();
+                            }
+                        );
+                    }
+                );
 
-                    // on(dom.byId("option"), "click", function () {
-                    //     console.log("option");
-                    // });
-                }
 
                 function createMap() {
                     map = new Map("map", {
                         basemap: "gray-vector",
-                        center: [-46.807, 32.553], 
+                        center: [-46.807, 32.553],
                         zoom: 16
                     });
                     map.on('load', addData());
