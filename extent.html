@@ -541,6 +541,7 @@
                         var feat = fs.features[i];
                         var p = getCenter(feat.geometry.getExtent());
                         centerPoints.push(p);
+                        i++;
                     }
                     return centerPoints;
                 }
