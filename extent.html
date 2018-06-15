@@ -464,6 +464,7 @@
                 }
 
                 esri.config.defaults.io.corsEnabledServers.push(arcgisDomain);
+
                 var info = new OAuthInfo({
                     appId: appId,
                     popup: false,
@@ -472,39 +473,25 @@
                 esriId.registerOAuthInfos([info]);
                 esriId.checkSignInStatus(info.portalUrl + "/sharing").then(
                     function () {
-                        new arcgisPortal.Portal(info.portalUrl).signIn().then(
-                            function (portalUser) {
-                                // domAttr.set("userId", "innerHTML", portalUser.fullName);
-                                // domStyle.set("anonymous", "display", "none");
-                                // domStyle.set("personalized", "display", "block");
-                                //addGraphicsLayer();
-                                //addLayers();
-                                //calcMaxOffset();
-                            }
-                        );
-                    }
-                );
-
-                createMap();
-
-                function createMap() {
-                    map = new Map("map", {
-                        basemap: "gray-vector",
-                        center: [-74, 40],
-                        zoom: 4,
-                        autoResize: true
+                        new arcgisPortal.Portal(info.portalUrl).signIn()
                     });
-                    map.on('load', addData);
-                }
+
+                map = new Map("map", {
+                    basemap: "gray-vector",
+                    center: [-74, 40],
+                    zoom: 4,
+                    autoResize: true
+                });
+
+                map.on('load', addData);
 
                 function addData() {
                     featureLayer = new FeatureLayer(arcgisDomain + catalog + dataset, {
                         mode: FeatureLayer.MODE_SNAPSHOT,
                         outFields: ["objectid"]
                     });
-
                     featureLayer.on('load', async function () {
-                        extent = await calculateExtent();
+                        var extent = await calculateExtent();
                         var e = extent;
                         console.log("extent:", extent);
                         console.log("extent:", extent[4]);
@@ -513,7 +500,11 @@
 
                 async function calculateExtent() {
                     var oids = await getOids();
-                    return oids;
+                    var fs = await sampleData(oids);
+                    var centerPoints = getCenterPoints(fs);
+                    var hull = geometryEngine.convexHull(centerPoints, true);
+                    var newExtent = await webAssemblyProjection(hull[0], map.spatialReference)
+                    return newExtent;
                 }
 
                 async function getOids() {
@@ -535,168 +526,218 @@
                     });
                 }
 
-                function getFillSymbol() {
-                    var r = Math.floor(Math.random() * 250);
-                    var g = Math.floor(Math.random() * 100);
-                    var b = Math.floor(Math.random() * 100);
-                    return new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
-                        new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
-                            new Color([r, g, b]), 1), new Color([r, g, b, 0.25])
-                    );
-                }
-
-                function calcMaxOffset() {
-                    var mapContainer = dom.byId("map");
-                    var maxAllowableOffset = Math.sqrt(map.extent.getWidth() / mapContainer.getBoundingClientRect().width * map.extent.getHeight() / mapContainer.getBoundingClientRect().height);
-                    //snap maxAllowableOffset to powers of 2 thus accepting a range of 0.5 px to 2 px between adjacent vertices
-                    //snapping is needed for better caching on all levels: JS memory cache, HTTP cache, server-side cache
-                    //maxAllowableOffset = Math.pow(2, Math.round(Math.log2(maxAllowableOffset)));
-                    console.log(maxAllowableOffset)
-                }
-
-                function requestSucceeded(res) {
-                    // for (var i = 0; i < res.features.length; i++) {
-                    //     console.log(res.features[i]);
-                    // }
-
-                    //var extent = new Extent(JSON.stringify(res.extent));
-                    var extent = new esri.geometry.Extent({
-                        "xmin": res.extent.xmin, "ymin": res.extent.ymin, "xmax": res.extent.xmax, "ymax": res.extent.ymax,
-                        "spatialReference": { "wkid": 4326 }
-                    });
-                    var sfs = getFillSymbol();
-                    var graphic = new Graphic(extent, sfs);
-                    graphicLayer.add(graphic);
-                }
-
-                function requestFailed(evt) {
-                    console.log("failed", evt);
-                }
-
-                function queryFeature(oid) {
-                    var params = {
-                        objectIds: oid,
-                        returnExtentOnly: true,
-                        f: "json"
-                    };
-                    var requestHandle = esriRequest({
-                        url: featureLayer.url + '/query',
-                        content: params,
-                        handleAs: "json",
-                    }, {
-                            usePost: false
-                        });
-
-                    requestHandle.then(requestSucceeded, requestFailed);
-
-                }
-
-                function addGraphicsLayer() {
-                    graphicLayer = new GraphicsLayer();
-                    map.addLayer(graphicLayer);
-                }
-
-                function dataExtent() {
-                    var params = {
-                        where: "1=1",
-                        outFields: ["*"],
-                        returnExtentOnly: true,
-                        f: "json"
-                    };
-                    var requestHandle = esriRequest({
-                        url: featureLayer.url + '/query',
-                        content: params,
-                        handleAs: "json",
-                    }, {
-                            usePost: false
-                        });
-
-                    requestHandle.then(requestSucceeded, requestFailed);
-                }
-
-                function featuresExtent() {
-                    var params = {
-                        objectIds: "1,2,3",
-                        outFields: ["*"],
-                        returnExtentOnly: true,
-                        f: "json"
-                    };
-                    var requestHandle = esriRequest({
-                        url: featureLayer.url + '/query',
-                        content: params,
-                        handleAs: "json",
-                    }, {
-                            usePost: false
-                        });
-
-                    requestHandle.then(requestSucceeded, requestFailed);
-                }
-
-                function queryFeatures() {
-                    // var oids = [1, 2, 3];
-                    // for (var i = 0; i < oids.length; i++) {
-                    //     queryFeature(oids[i]);
-                    // }
-                    // return;
-                    var params = {
-                        objectIds: "1,2,3",
-                        outFields: ["*"],
-                        returnGeometry: true,
-                        maxAllowableOffset: 1,
-                        f: "json"
-                    };
-                    var requestHandle = esriRequest({
-                        url: featureLayer.url + '/query',
-                        content: params,
-                        handleAs: "json",
-                    }, {
-                            usePost: false
-                        });
-
-                    requestHandle.then(drawFeatures, requestFailed);
-                }
-
-                function drawFeatures(featureSet) {
-                    var centerPts = [];
-                    for (var i = 0; i < featureSet.features.length; i++) {
-                        var feature = featureSet.features[i];
-                        var sfs = getFillSymbol();
-                        //feature.geometry.spatialReference = {"wkid":4326 };
-                        var json = feature.geometry;
-                        var poly = new Polygon(json);
-                        centerPts.push(getCenterPoint(poly.getExtent(), new Point()));
-                        var g = new Graphic(poly, sfs);
-                        map.graphics.add(g);
+                function sampleData(fs) {
+                    var centerPoints = [];
+                    var getCenter = function (geoExtent) {
+                        var xMid = (geoExtent.xmin + geoExtent.xmax) / 2;
+                        var yMid = (geoExtent.ymin + geoExtent.ymax) / 2;
+                        var point = new Point();
+                        point.x = xMid;
+                        point.y = yMid;
+                        point.spatialReference = geoExtent.spatialReference;
+                        return point;
                     }
-                    var hull = geometryEngine.convexHull(centerPts, true);
-                    webAssemblyProjection(hull[0], map.spatialReference).then(function (geom) {
-                        var g = geom;
-                        map.setExtent(geom.getExtent());
-                    });
-                }
-
-                function webAssemblyProjection(geom, outSpat) {
-                    if (!projection.isSupported()) {
-                        console.log("Web Assembly not supported on this browser (<=IE11), do geom service");
-                        //// Project w/ geometry service
+                    for (var i = 0; i < fs.features.length; i++) {
+                        var feat = fs.features[i];
+                        var p = getCenter(feat.geometry.getExtent());
+                        centerPoints.push(p);
                     }
-                    return projection.load().then(function () {
-                        return projection.project(geom, outSpat);
+                    return centerPoints;
+                }
+
+                async function webAssemblyProjection(geom, outSpat) {
+                    return new Promise(function (resolve, reject) {
+                        if (!projection.isSupported()) {
+                            console.log("Web Assembly not supported in browser (<=IE11), use geometry service");
+                        }
+                        projection.load().then(function () {
+                            var newGeom = projection.project(geom, outSpat);
+                            resolve(newGeom);
+                        });
                     });
                 }
 
-                function getCenterPoint(geoExtent, point) {
-                    var xMid = (geoExtent.xmin + geoExtent.xmax) / 2;
-                    var yMid = (geoExtent.ymin + geoExtent.ymax) / 2;
-                    point.x = xMid;
-                    point.y = yMid;
-                    point.spatialReference = geoExtent.spatialReference;
-                    return point;
-                }
 
-                function drawExtent() {
 
-                }
+                // async function getExtent(oids) {
+
+                // }
+
+                // async function getSample(oids) {
+                //     return new Promise(function (resolve, reject) {
+                //         var sampleOids = [];
+                //         var params = {
+                //             returnGeometry: true,
+                //             maxAllowableOffset: 1,
+                //             f: "json"
+                //         };
+                //         if (oids.length > featureLayer.maxRecordCount) {
+                //             for (var i = 0; i < featureLayer.maxRecordCount; i++) {
+                //                 sampleOids.push(oids[getRandom(oids.length)])
+                //             }
+                //         } else {
+                //             sampleOids = oids;
+                //         }
+                //         params.objectIds = sampleOids;
+                //         return esriRequest({
+                //             url: featureLayer.url + '/query',
+                //             content: params,
+                //             handleAs: "json",
+                //         }, { usePost: false }).then(function (resp) {
+                //             resolve(resp);
+                //         }, function (err) {
+                //             reject(err);
+                //         });
+                //     });
+                // }
+
+                // function getRandom(max) {
+                //     return Math.floor(Math.random() * Math.floor(max));
+                // }
+
+                // function getFillSymbol() {
+                //     var r = Math.floor(Math.random() * 250);
+                //     var g = Math.floor(Math.random() * 100);
+                //     var b = Math.floor(Math.random() * 100);
+                //     return new SimpleFillSymbol(SimpleFillSymbol.STYLE_SOLID,
+                //         new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+                //             new Color([r, g, b]), 1), new Color([r, g, b, 0.25])
+                //     );
+                // }
+
+                // function calcMaxOffset() {
+                //     var mapContainer = dom.byId("map");
+                //     var maxAllowableOffset = Math.sqrt(map.extent.getWidth() / mapContainer.getBoundingClientRect().width * map.extent.getHeight() / mapContainer.getBoundingClientRect().height);
+                //     //snap maxAllowableOffset to powers of 2 thus accepting a range of 0.5 px to 2 px between adjacent vertices
+                //     //snapping is needed for better caching on all levels: JS memory cache, HTTP cache, server-side cache
+                //     //maxAllowableOffset = Math.pow(2, Math.round(Math.log2(maxAllowableOffset)));
+                //     console.log(maxAllowableOffset)
+                // }
+
+                // function requestSucceeded(res) {
+                //     // for (var i = 0; i < res.features.length; i++) {
+                //     //     console.log(res.features[i]);
+                //     // }
+
+                //     //var extent = new Extent(JSON.stringify(res.extent));
+                //     var extent = new esri.geometry.Extent({
+                //         "xmin": res.extent.xmin, "ymin": res.extent.ymin, "xmax": res.extent.xmax, "ymax": res.extent.ymax,
+                //         "spatialReference": { "wkid": 4326 }
+                //     });
+                //     var sfs = getFillSymbol();
+                //     var graphic = new Graphic(extent, sfs);
+                //     graphicLayer.add(graphic);
+                // }
+
+                // function requestFailed(evt) {
+                //     console.log("failed", evt);
+                // }
+
+                // function queryFeature(oid) {
+                //     var params = {
+                //         objectIds: oid,
+                //         returnExtentOnly: true,
+                //         f: "json"
+                //     };
+                //     var requestHandle = esriRequest({
+                //         url: featureLayer.url + '/query',
+                //         content: params,
+                //         handleAs: "json",
+                //     }, {
+                //             usePost: false
+                //         });
+
+                //     requestHandle.then(requestSucceeded, requestFailed);
+
+                // }
+
+                // function addGraphicsLayer() {
+                //     graphicLayer = new GraphicsLayer();
+                //     map.addLayer(graphicLayer);
+                // }
+
+                // function dataExtent() {
+                //     var params = {
+                //         where: "1=1",
+                //         outFields: ["*"],
+                //         returnExtentOnly: true,
+                //         f: "json"
+                //     };
+                //     var requestHandle = esriRequest({
+                //         url: featureLayer.url + '/query',
+                //         content: params,
+                //         handleAs: "json",
+                //     }, {
+                //             usePost: false
+                //         });
+
+                //     requestHandle.then(requestSucceeded, requestFailed);
+                // }
+
+                // function featuresExtent() {
+                //     var params = {
+                //         objectIds: "1,2,3",
+                //         outFields: ["*"],
+                //         returnExtentOnly: true,
+                //         f: "json"
+                //     };
+                //     var requestHandle = esriRequest({
+                //         url: featureLayer.url + '/query',
+                //         content: params,
+                //         handleAs: "json",
+                //     }, {
+                //             usePost: false
+                //         });
+
+                //     requestHandle.then(requestSucceeded, requestFailed);
+                // }
+
+                // function queryFeatures() {
+                //     // var oids = [1, 2, 3];
+                //     // for (var i = 0; i < oids.length; i++) {
+                //     //     queryFeature(oids[i]);
+                //     // }
+                //     // return;
+                //     var params = {
+                //         objectIds: "1,2,3",
+                //         outFields: ["*"],
+                //         returnGeometry: true,
+                //         maxAllowableOffset: 1,
+                //         f: "json"
+                //     };
+                //     var requestHandle = esriRequest({
+                //         url: featureLayer.url + '/query',
+                //         content: params,
+                //         handleAs: "json",
+                //     }, {
+                //             usePost: false
+                //         });
+
+                //     requestHandle.then(drawFeatures, requestFailed);
+                // }
+
+                // function drawFeatures(featureSet) {
+                //     var centerPts = [];
+                //     for (var i = 0; i < featureSet.features.length; i++) {
+                //         var feature = featureSet.features[i];
+                //         var sfs = getFillSymbol();
+                //         //feature.geometry.spatialReference = {"wkid":4326 };
+                //         var json = feature.geometry;
+                //         var poly = new Polygon(json);
+                //         centerPts.push(getCenterPoint(poly.getExtent(), new Point()));
+                //         var g = new Graphic(poly, sfs);
+                //         map.graphics.add(g);
+                //     }
+                //     var hull = geometryEngine.convexHull(centerPts, true);
+                //     webAssemblyProjection(hull[0], map.spatialReference).then(function (geom) {
+                //         var g = geom;
+                //         map.setExtent(geom.getExtent());
+                //     });
+                // }
+
+                // function drawExtent() {
+
+                // }
             });
     </script>
 </head>
