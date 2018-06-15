@@ -19,6 +19,7 @@ require([
     "esri/request",
     "esri/geometry/geometryEngine",
     "esri/geometry/projection",
+    "esri/geometry/webMercatorUtils",
     "dojo/domReady!"
 ], function (
     Map,
@@ -36,7 +37,8 @@ require([
     esriId,
     esriRequest,
     geometryEngine,
-    projection
+    projection,
+    webMercatorUtils
 ) {
         useCrystalBugger();
 
@@ -72,7 +74,11 @@ require([
             autoResize: true
         });
 
-        map.on('load', addData);
+        map.on('load', function () {
+            map.on("mouse-move", showCoordinates);
+            map.on("mouse-drag", showCoordinates);
+            addData();
+        });
 
         function addData() {
             addGraphicsLayer();
@@ -128,6 +134,7 @@ require([
                 var feat = fs.features[i];
                 //Should first check if polygon or line, but doing that now
                 var geo = new Polygon(feat.geometry);
+                console.log(feat.attributes["st_abbrev"], geo.getExtent().normalize().length);
                 var p = getCenter(geo.getExtent());
                 centerPoints.push(p);
             }
@@ -151,6 +158,7 @@ require([
             return new Promise(function (resolve, reject) {
                 var sampleOids = [];
                 var params = {
+                    outFields: ["st_abbrev"],
                     returnGeometry: true,
                     maxAllowableOffset: 1,
                     f: "json"
@@ -219,5 +227,12 @@ require([
         function addGraphicsLayer() {
             graphicLayer = new GraphicsLayer();
             map.addLayer(graphicLayer);
+        }
+
+        function showCoordinates(evt) {
+            //the map is in web mercator but display coordinates in geographic (lat, long)
+            var mp = webMercatorUtils.webMercatorToGeographic(evt.mapPoint);
+            //display mouse coordinates
+            dom.byId("info").innerHTML = mp.x.toFixed(3) + ", " + mp.y.toFixed(3);
         }
     });
