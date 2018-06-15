@@ -612,7 +612,7 @@
                     for(i=0; i<points.length; i++){
                         var point = points[i];
                         var sms = getMarkerSymbol();
-                        var graphic = new Graphic(extent, sms);
+                        var graphic = new Graphic(point, sms);
                         graphicLayer.add(graphic);
                         i++;
                     }   
