@@ -526,7 +526,7 @@
                     });
                 }
 
-                function sampleData(fs) {
+                function getCenterPoints(fs) {
                     var centerPoints = [];
                     var getCenter = function (geoExtent) {
                         var xMid = (geoExtent.xmin + geoExtent.xmax) / 2;
@@ -557,39 +557,33 @@
                     });
                 }
 
-
-
-                // async function getExtent(oids) {
-
-                // }
-
-                // async function getSample(oids) {
-                //     return new Promise(function (resolve, reject) {
-                //         var sampleOids = [];
-                //         var params = {
-                //             returnGeometry: true,
-                //             maxAllowableOffset: 1,
-                //             f: "json"
-                //         };
-                //         if (oids.length > featureLayer.maxRecordCount) {
-                //             for (var i = 0; i < featureLayer.maxRecordCount; i++) {
-                //                 sampleOids.push(oids[getRandom(oids.length)])
-                //             }
-                //         } else {
-                //             sampleOids = oids;
-                //         }
-                //         params.objectIds = sampleOids;
-                //         return esriRequest({
-                //             url: featureLayer.url + '/query',
-                //             content: params,
-                //             handleAs: "json",
-                //         }, { usePost: false }).then(function (resp) {
-                //             resolve(resp);
-                //         }, function (err) {
-                //             reject(err);
-                //         });
-                //     });
-                // }
+                async function sampleData(oids) {
+                    return new Promise(function (resolve, reject) {
+                        var sampleOids = [];
+                        var params = {
+                            returnGeometry: true,
+                            maxAllowableOffset: 1,
+                            f: "json"
+                        };
+                        if (oids.length > featureLayer.maxRecordCount) {
+                            for (var i = 0; i < featureLayer.maxRecordCount; i++) {
+                                sampleOids.push(oids[getRandom(oids.length)])
+                            }
+                        } else {
+                            sampleOids = oids;
+                        }
+                        params.objectIds = sampleOids;
+                        return esriRequest({
+                            url: featureLayer.url + '/query',
+                            content: params,
+                            handleAs: "json",
+                        }, { usePost: false }).then(function (resp) {
+                            resolve(resp);
+                        }, function (err) {
+                            reject(err);
+                        });
+                    });
+                }
 
                 // function getRandom(max) {
                 //     return Math.floor(Math.random() * Math.floor(max));
