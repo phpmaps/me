@@ -123,44 +123,31 @@ require([
 
         function getCenterPoints(fs) {
             var centerPoints = [];
-            var getCenter = function (geoExtent) {
-                var xMid = (geoExtent.xmin + geoExtent.xmax) / 2;
-                var yMid = (geoExtent.ymin + geoExtent.ymax) / 2;
-                var point = new Point();
-                point.x = xMid;
-                point.y = yMid;
-                point.spatialReference = geoExtent.spatialReference;
-                return point;
-            }
             for (var i = 0; i < fs.features.length; i++) {
                 var feat = fs.features[i];
-                //Should first check if polygon or line, but doing that now
-                var geo = new Polygon(feat.geometry);
-                //console.log(feat.attributes["st_abbrev"], geo.normalize().length);
-                if(feat.attributes["st_abbrev"] === "AK"){
-                    var a = geo.getExtent();
-                    var b = getCenter(geo.getExtent());
-                    console.log("a-extent", a);
-                    console.log("b-point", b);
-                    console.log("b-point-centroid", geo.getCentroid());
+                //we should first check if it's polygon or polyline
+                //in case of polyline - since it does not have getCentroid() we would need to maybe find center vertex 
+                //or perhaps get extent using line.getExtent(), then find center of the rect, like below.  Nonetheless, a single solution
+                //which handles  points and polygons would be valuable in itself, as it gets users to their data without distracting pans and zooms
+
+                /*
+                var getCenter = function (geoExtent) {
+                    var xMid = (geoExtent.xmin + geoExtent.xmax) / 2;
+                    var yMid = (geoExtent.ymin + geoExtent.ymax) / 2;
+                    var point = new Point();
+                    point.x = xMid;
+                    point.y = yMid;
+                    point.spatialReference = geoExtent.spatialReference;
+                    return point;
                 }
-                var p = getCenter(geo.getExtent());
-                centerPoints.push(p);
+                */
+
+                var geo = new Polygon(feat.geometry); // not checking if polyline, for brevity
+                console.log(feat.attributes["st_abbrev"], geo);
+                centerPoints.push(geo.getCentroid());
             }
             drawPoints(centerPoints);
             return centerPoints;
-        }
-
-        async function webAssemblyProjection(geom, outSpat) {
-            return new Promise(function (resolve, reject) {
-                if (!projection.isSupported()) {
-                    console.log("Web Assembly not supported in browser (<=IE11), use geometry service");
-                }
-                projection.load().then(function () {
-                    var newGeom = projection.project(geom, outSpat);
-                    resolve(newGeom);
-                });
-            });
         }
 
         async function sampleData(oids) {
@@ -194,6 +181,18 @@ require([
                     resolve(resp);
                 }, function (err) {
                     reject(err);
+                });
+            });
+        }
+
+        async function webAssemblyProjection(geom, outSpat) {
+            return new Promise(function (resolve, reject) {
+                if (!projection.isSupported()) {
+                    console.log("Web Assembly not supported in browser (<=IE11), use geometry service");
+                }
+                projection.load().then(function () {
+                    var newGeom = projection.project(geom, outSpat);
+                    resolve(newGeom);
                 });
             });
         }
