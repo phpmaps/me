@@ -451,7 +451,7 @@
         ) {
                 useCrystalBugger();
                 attachToPortal();
-                createMap();
+                
 
                 function useBankBeetle() {
                     arcgisDomain = "https://bankbeetle.esri.com";
@@ -477,6 +477,7 @@
                         function () {
                             new arcgisPortal.Portal(info.portalUrl).signIn().then(
                                 function (portalUser) {
+                                    createMap();
                                     // domAttr.set("userId", "innerHTML", portalUser.fullName);
                                     // domStyle.set("anonymous", "display", "none");
                                     // domStyle.set("personalized", "display", "block");
