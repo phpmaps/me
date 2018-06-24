@@ -28,7 +28,7 @@ require([
     var extent = new Extent(ext);
     var geom = webMercatorUtils.geographicToWebMercator(extent);
 
-        map = new Map("map", {
+        map = new Map("map1", {
             basemap: "gray-vector",
             extent: geom,
             zoom: 12,
