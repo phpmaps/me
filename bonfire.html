@@ -9,8 +9,7 @@
     <link rel="stylesheet" href="https://js.arcgis.com/3.24/esri/css/esri.css">
     <style>
         html,
-        body,
-        #map {
+        body {
             margin: 0;
             padding: 0;
             height: 100%;
@@ -27,6 +26,13 @@
 
             .small-screen {
                 display: none;
+            }
+
+            .map {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                width: 100%;
             }
 
             .main-table {
@@ -67,9 +73,7 @@
         }
 
 
-        @media only screen 
-        and (min-device-width: 375px) 
-        and (max-device-width: 667px){
+        @media only screen and (min-device-width: 375px) and (max-device-width: 667px) {
             .large-screen {
                 display: none;
             }
@@ -81,6 +85,25 @@
             .main-table {
                 display: flex;
                 flex-direction: column;
+            }
+
+            .mobile-map-table {
+                display: flex;
+                flex-direction: row;
+                height: 100%;
+            }
+
+            .map {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                width: 97%;
+            }
+
+            .track {
+                height: 100%;
+                width: 3%;
+                background-color: #000; 
             }
 
             .design {
@@ -95,6 +118,7 @@
             }
 
             .map-col {
+                width: 100%;
                 height: 567px;
             }
 
@@ -326,8 +350,11 @@
                 </div>
             </div>
             <div class="map-col">
-                <div id="map">
-                    <span id="info" style="position:absolute; left:15px; bottom:5px; color:#000; z-index:50;"></span>
+                <div class="mobile-map-table">
+                    <div class="map" id="map">
+                        <span id="info" style="position:absolute; left:15px; bottom:5px; color:#000; z-index:50;"></span>
+                    </div>
+                    <div class="track"></div>
                 </div>
             </div>
         </div>
