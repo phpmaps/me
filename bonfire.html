@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no" />
+    <title>Extent</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.24/esri/themes/calcite/dijit/calcite.css">
+    <link rel="stylesheet" href="https://js.arcgis.com/3.24/esri/css/esri.css">
+    <style>
+        html,
+        body,
+        #map {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+        /* Desktops and laptops */
+
+        @media only screen and (min-width: 768px) {
+            .large-screen {
+                display: block;
+                height: 100%;
+            }
+
+            .small-screen {
+                display: none;
+            }
+
+            .main-table {
+                display: flex;
+                flex-direction: row;
+                height: 100%;
+            }
+
+            .design {
+                width: 3%;
+                background-color: #000;
+            }
+
+            .map-col {
+                width: 69%;
+            }
+
+            .promo-col {
+                padding: 20px;
+                background-color: #FFFF33;
+                width: 28%;
+            }
+
+            li {
+                padding: 4px;
+            }
+        }
+
+        @media only screen and (min-device-width: 375px) and (max-device-width: 667px) and (orientation: portrait) {
+            /* iPhone 6 Portrait */
+            .large-screen {
+                display: none;
+            }
+
+            .small-screen {
+                display: block;
+            }
+        }
+
+
+        @media only screen 
+        and (min-device-width: 375px) 
+        and (max-device-width: 667px){
+            .large-screen {
+                display: none;
+            }
+
+            .small-screen {
+                display: block;
+            }
+
+            .main-table {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .design {
+                height: 20px;
+                background-color: #000;
+            }
+
+            .promo-col {
+                padding: 20px;
+                background-color: #FFFF33;
+                height: 367px;
+            }
+
+            .map-col {
+                height: 567px;
+            }
+
+            li {
+                padding: 4px;
+            }
+        }
+
+        @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (orientation: portrait) {
+            /* iPhone 6+ Portrait */
+        }
+
+
+        @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (orientation: landscape) {
+            /* iPhone 6+ landscape */
+        }
+
+        @media only screen and (max-device-width: 640px),
+        only screen and (max-device-width: 667px),
+        only screen and (max-width: 480px) {
+            /* iPhone 6 and iPhone 6+ portrait and landscape */
+        }
+
+        @media only screen and (max-device-width: 640px),
+        only screen and (max-device-width: 667px),
+        only screen and (max-width: 480px) and (orientation: portrait) {
+            /* iPhone 6 and iPhone 6+ portrait */
+        }
+
+        @media only screen and (max-device-width: 640px),
+        only screen and (max-device-width: 667px),
+        only screen and (max-width: 480px) and (orientation: landscape) {
+            /* iPhone 6 and iPhone 6+ landscape */
+        }
+    </style>
+
+    <script>
+        var dojoConfig = {
+            parseOnLoad: true
+        };
+    </script>
+    <script src="https://js.arcgis.com/3.24/"></script>
+    <script src="beach.js"></script>
+</head>
+
+<body class="calcite">
+    <div class="large-screen">
+        <div class="main-table">
+            <div class="design"></div>
+            <div class="map-col">
+                <div id="map">
+                    <span id="info" style="position:absolute; left:15px; bottom:5px; color:#000; z-index:50;"></span>
+                </div>
+            </div>
+            <div class="promo-col">
+                <h2>San Diego Beach Bonfire Scene</h2>
+                <h3>Sunday July 9th 6-9PM - </h3>
+                <div>
+                    <h4>Directions from San Diego Convention Center</h4>
+                    <ol>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTStraight.png">
+                            <span>Go southeast on Salida Loop</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTForkLeft.png">
+                            <span>At fork keep left</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTBearRight.png">
+                            <span>Bear right on E Harbor Dr</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTTurnLeft.png">
+                            <span>Turn left on Sigsbee St</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTTurnLeft.png">
+                            <span>Turn left on Logan Ave</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTBearRight.png">
+                            <span>Bear right on S 16th St</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTTurnRight.png">
+                            <span>Turn right on Commercial St</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTTurnLeft.png">
+                            <span>Turn left on S 19th St</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTRampLeft.png">
+                            <span>Bear left onto ramp and go on I-5 N</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTRampRight.png">
+                            <span>Take I-8 W toward Beaches / El Centro</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTForkLeft.png">
+                            <span>At fork keep left on I-8 W toward Beaches</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTTurnLeft.png">
+                            <span>Turn left on Sunset Cliffs Blvd</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTForkRight.png">
+                            <span>At fork keep right on Sunset Cliffs Boulevard</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTTurnRight.png">
+                            <span>Turn right on Saratoga Ave till street ends</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTTurnRight.png">
+                            <span>Park car in Ocean Beach Park (Saratoga Park) </span>
+                            <br>
+                        </li>
+                    </ol>
+                    <h4>Beach party at -117.252600 32.750900 (Look for chair #3)</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="small-screen">
+        <div class="main-table">
+            <div class="design"></div>
+            <div class="promo-col">
+                <h2>San Diego Beach Bonfire Scene</h2>
+                <h3>Sunday July 9th 6-9PM - </h3>
+                <div>
+                    <h4>Directions from San Diego Convention Center</h4>
+                    <ol>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTStraight.png">
+                            <span>Go southeast on Salida Loop</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTForkLeft.png">
+                            <span>At fork keep left</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTBearRight.png">
+                            <span>Bear right on E Harbor Dr</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTTurnLeft.png">
+                            <span>Turn left on Sigsbee St</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTTurnLeft.png">
+                            <span>Turn left on Logan Ave</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTBearRight.png">
+                            <span>Bear right on S 16th St</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTTurnRight.png">
+                            <span>Turn right on Commercial St</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTTurnLeft.png">
+                            <span>Turn left on S 19th St</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTRampLeft.png">
+                            <span>Bear left onto ramp and go on I-5 N</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTRampRight.png">
+                            <span>Take I-8 W toward Beaches / El Centro</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTForkLeft.png">
+                            <span>At fork keep left on I-8 W toward Beaches</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTTurnLeft.png">
+                            <span>Turn left on Sunset Cliffs Blvd</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTForkRight.png">
+                            <span>At fork keep right on Sunset Cliffs Boulevard</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTTurnRight.png">
+                            <span>Turn right on Saratoga Ave till street ends</span>
+                            <br>
+                        </li>
+                        <li>
+                            <img style="display:inline-block;margin:-3px 15px;" src="https://js.arcgis.com/3.24/esri/dijit/images/Directions/maneuvers/esriDMTTurnRight.png">
+                            <span>Park car in Ocean Beach Park (Saratoga Park) </span>
+                            <br>
+                        </li>
+                    </ol>
+                    <h4>Beach party at -117.252600 32.750900 (Look for chair #3)</h4>
+                </div>
+            </div>
+            <div class="map-col">
+                <div id="map">
+                    <span id="info" style="position:absolute; left:15px; bottom:5px; color:#000; z-index:50;"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

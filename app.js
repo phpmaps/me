@@ -251,7 +251,7 @@ require([
 
         async function projectThis() {
             //It appears a map services full extent and initial extent may be different from the item's extent
-            //Sudo code to confirm.  Clearly spatial refs are different.
+            //Sudo code to confirm.  Clearly spatial refs are different.  
             // ie. item https://lacs.maps.arcgis.com/sharing/rest/content/items/99fd67933e754a1181cc755146be21ca?f=pjson
             /*
 
@@ -265,6 +265,24 @@ require([
                 71.40623540871195
                 ]
             ]
+
+            vs (item) https://developers.arcgis.com/rest/users-groups-and-items/item.htm
+
+            spatialReference
+                :
+                {wkid: 4326, _geVersion: g}
+                xmax
+                :
+                -66.96927099999998
+                xmin
+                :
+                -178.21759839999993
+                ymax
+                :
+                71.40623540871195
+                ymin
+                :
+                18.921786299999976
 
             */
             var ext = {
