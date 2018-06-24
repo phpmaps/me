@@ -16,19 +16,28 @@ require([
     Extent,
     dom
 ) {
-    var ext = {
-        "xmin": -117.25,
-        "ymin": 32.7,
-        "xmax": -117.15,
-        "ymax": 32.76,
-        "spatialReference": {
-            "wkid": 4326
-        }
-    };
-    var extent = new Extent(ext);
-    var geom = webMercatorUtils.geographicToWebMercator(extent);
 
-        map = new Map("map1", {
+        var whatmap;
+        if (window.innerWidth <= 768) {
+            whatmap = "map-small";
+        } else {
+            whatmap = "map-large";
+        }
+
+        var ext = {
+            "xmin": -117.25,
+            "ymin": 32.7,
+            "xmax": -117.15,
+            "ymax": 32.76,
+            "spatialReference": {
+                "wkid": 4326
+            }
+        };
+
+        var extent = new Extent(ext);
+        var geom = webMercatorUtils.geographicToWebMercator(extent);
+
+        map = new Map(whatmap, {
             basemap: "gray-vector",
             extent: geom,
             zoom: 12,
@@ -43,12 +52,12 @@ require([
 
         function addData() {
             featureLayerLns = new FeatureLayer("https://services.arcgis.com/q7zPNeKmTWeh7Aor/arcgis/rest/services/convention_center_to_ocean_beach/FeatureServer/2");
-            featureLayerLns.on('load', function () {console.log("loaded lns...")});
+            featureLayerLns.on('load', function () { console.log("loaded lns...") });
             featureLayerDts = new FeatureLayer("https://services.arcgis.com/q7zPNeKmTWeh7Aor/arcgis/rest/services/convention_center_to_ocean_beach/FeatureServer/0");
-            featureLayerDts.on('load', function () {console.log("loaded dts...")});
+            featureLayerDts.on('load', function () { console.log("loaded dts...") });
             featureLayerEnds = new FeatureLayer("https://services.arcgis.com/q7zPNeKmTWeh7Aor/arcgis/rest/services/convention_center_to_ocean_beach/FeatureServer/1");
-            featureLayerEnds.on('load', function () {console.log("loaded ends...")});
-            
+            featureLayerEnds.on('load', function () { console.log("loaded ends...") });
+
             map.addLayers([featureLayerLns, featureLayerDts, featureLayerEnds]);
         }
 

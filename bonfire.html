@@ -20,7 +20,7 @@
 
         @media only screen and (min-width: 768px) {
             .large-screen {
-                display: none;
+                display: block;
                 height: 100%;
             }
 
@@ -28,7 +28,7 @@
                 display: none;
             }
 
-            .map {
+            #map-large {
                 margin: 0;
                 padding: 0;
                 height: 100%;
@@ -93,16 +93,16 @@
                 height: 667px;
             }
 
-            .map {
+            #map-small {
                 margin: 0;
                 padding: 0;
                 height: 100%;
-                width: 97%;
+                width: 90%;
             }
 
             .track {
                 height: 100%;
-                width: 3%;
+                width: 10%;
                 background-color: #000; 
             }
 
@@ -169,7 +169,7 @@
         <div class="main-table">
             <div class="design"></div>
             <div class="map-col">
-                <div id="map">
+                <div id="map-large">
                     <span id="info" style="position:absolute; left:15px; bottom:5px; color:#000; z-index:50;"></span>
                 </div>
             </div>
@@ -351,7 +351,7 @@
             </div>
             <div class="map-col">
                 <div class="mobile-map-table">
-                    <div class="map" id="map1">
+                    <div id="map-small">
                         <span id="info" style="position:absolute; left:15px; bottom:5px; color:#000; z-index:50;"></span>
                     </div>
                     <div class="track"></div>
