@@ -20,8 +20,10 @@ require([
         var whatmap;
         if (window.innerWidth <= 768) {
             whatmap = "map-small";
+            zoommap = 14;
         } else {
             whatmap = "map-large";
+            zoommap = 12;
         }
 
         var ext = {
@@ -40,7 +42,7 @@ require([
         map = new Map(whatmap, {
             basemap: "gray-vector",
             extent: geom,
-            zoom: 12,
+            zoom: zoommap,
             autoResize: true
         });
 
@@ -62,9 +64,7 @@ require([
         }
 
         function showCoordinates(evt) {
-            //the map is in web mercator but display coordinates in geographic (lat, long)
             var mp = webMercatorUtils.webMercatorToGeographic(evt.mapPoint);
-            //display mouse coordinates
             dom.byId("info").innerHTML = mp.x.toFixed(3) + ", " + mp.y.toFixed(3);
         }
     });
