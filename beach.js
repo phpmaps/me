@@ -20,7 +20,7 @@ require([
         var whatmap;
         if (window.innerWidth <= 768) {
             whatmap = "map-small";
-            zoommap = 14;
+            zoommap = 9;
         } else {
             whatmap = "map-large";
             zoommap = 12;
