@@ -49,7 +49,7 @@
             padding: 4px;
         }
 
-        ol{
+        ol {
             margin-left: -20px;
         }
 
@@ -146,30 +146,213 @@
         }
 
         @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (orientation: portrait) {
-            /* iPhone 6+ Portrait */
+            .large-screen {
+                display: none;
+            }
+
+            .small-screen {
+                display: block;
+            }
+
+            .main-table {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .mobile-map-table {
+                display: flex;
+                flex-direction: row;
+                height: 667px;
+            }
+
+            #map-small {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                width: 92%;
+            }
+
+            .track {
+                height: 100%;
+                width: 8%;
+                background-color: #000;
+            }
+
+            .design {
+                height: 20px;
+                background-color: #000;
+            }
+
+            .promo-col {
+                padding: 20px;
+                background-color: #FFFF33;
+                height: 820px;
+            }
+
+            .map-col {
+                width: 100%;
+                height: 567px;
+            }
         }
 
-
-        @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (orientation: landscape) {
-            /* iPhone 6+ landscape */
-        }
 
         @media only screen and (max-device-width: 640px),
         only screen and (max-device-width: 667px),
         only screen and (max-width: 480px) {
             /* iPhone 6 and iPhone 6+ portrait and landscape */
+            .large-screen {
+                display: none;
+            }
+
+            .small-screen {
+                display: block;
+            }
+
+            .main-table {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .mobile-map-table {
+                display: flex;
+                flex-direction: row;
+                height: 667px;
+            }
+
+            #map-small {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                width: 92%;
+            }
+
+            .track {
+                height: 100%;
+                width: 8%;
+                background-color: #000;
+            }
+
+            .design {
+                height: 20px;
+                background-color: #000;
+            }
+
+            .promo-col {
+                padding: 20px;
+                background-color: #FFFF33;
+                height: 820px;
+            }
+
+            .map-col {
+                width: 100%;
+                height: 567px;
+            }
         }
 
         @media only screen and (max-device-width: 640px),
         only screen and (max-device-width: 667px),
         only screen and (max-width: 480px) and (orientation: portrait) {
             /* iPhone 6 and iPhone 6+ portrait */
+            .large-screen {
+                display: none;
+            }
+
+            .small-screen {
+                display: block;
+            }
+
+            .main-table {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .mobile-map-table {
+                display: flex;
+                flex-direction: row;
+                height: 667px;
+            }
+
+            #map-small {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                width: 92%;
+            }
+
+            .track {
+                height: 100%;
+                width: 8%;
+                background-color: #000;
+            }
+
+            .design {
+                height: 20px;
+                background-color: #000;
+            }
+
+            .promo-col {
+                padding: 20px;
+                background-color: #FFFF33;
+                height: 820px;
+            }
+
+            .map-col {
+                width: 100%;
+                height: 567px;
+            }
         }
 
         @media only screen and (max-device-width: 640px),
         only screen and (max-device-width: 667px),
         only screen and (max-width: 480px) and (orientation: landscape) {
             /* iPhone 6 and iPhone 6+ landscape */
+            .large-screen {
+                display: none;
+            }
+
+            .small-screen {
+                display: block;
+            }
+
+            .main-table {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .mobile-map-table {
+                display: flex;
+                flex-direction: row;
+                height: 667px;
+            }
+
+            #map-small {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                width: 92%;
+            }
+
+            .track {
+                height: 100%;
+                width: 8%;
+                background-color: #000;
+            }
+
+            .design {
+                height: 20px;
+                background-color: #000;
+            }
+
+            .promo-col {
+                padding: 20px;
+                background-color: #FFFF33;
+                height: 820px;
+            }
+
+            .map-col {
+                width: 100%;
+                height: 567px;
+            }
         }
     </style>
 
@@ -290,8 +473,12 @@
         <div class="main-table">
             <div class="design"></div>
             <div class="promo-col">
-                <div class="block"><h1>San Diego Beach Bonfire Meetup</h1></div>
-                <div class="block short"><h2>Sunday July 9th 6-9PM</h2></div>
+                <div class="block">
+                    <h1>San Diego Beach Bonfire Meetup</h1>
+                </div>
+                <div class="block short">
+                    <h2>Sunday July 9th 6-9PM</h2>
+                </div>
                 <div class="directions">
                     <span class="ride-share">Uber / Lyft: Ocean Beach Park, Ocean Beach (Saratoga Park)</span>
                     <h3>From San Diego Convention Center</h3>
