@@ -1,0 +1,337 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #FFFF33;
+}
+
+.directions {
+    margin-top: 8px;
+}
+
+.ride-share {
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.short {
+    width: 200px;
+}
+
+.block {
+    background-color: #FFF;
+}
+
+h1 {
+    margin: 2px;
+}
+
+h2,
+h3,
+h4 {
+    margin: 1.5px;
+}
+
+li {
+    padding: 4px;
+}
+
+ol {
+    margin-left: -20px;
+}
+
+/* Desktops and laptops */
+
+@media only screen and (min-width: 768px) {
+    .large-screen {
+        display: block;
+        height: 100%;
+    }
+
+    .small-screen {
+        display: none;
+    }
+
+    #map-large {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+    }
+
+    .main-table {
+        display: flex;
+        flex-direction: row;
+        height: 100%;
+    }
+
+    .design {
+        width: 3%;
+        background-color: #000;
+    }
+
+    .map-col {
+        width: 67%;
+    }
+
+    .promo-col {
+        padding: 20px;
+        background-color: #FFFF33;
+        width: 30%;
+    }
+}
+
+@media only screen and (min-device-width: 375px) and (max-device-width: 667px) {
+    .large-screen {
+        display: none;
+    }
+
+    .small-screen {
+        display: block;
+    }
+
+    .main-table {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mobile-map-table {
+        display: flex;
+        flex-direction: row;
+        height: 667px;
+    }
+
+    #map-small {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 92%;
+    }
+
+    .track {
+        height: 100%;
+        width: 8%;
+        background-color: #000;
+    }
+
+    .design {
+        height: 20px;
+        background-color: #000;
+    }
+
+    .promo-col {
+        padding: 20px;
+        background-color: #FFFF33;
+        height: 820px;
+    }
+
+    .map-col {
+        width: 100%;
+        height: 567px;
+    }
+}
+
+@media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (orientation: portrait) {
+    .large-screen {
+        display: none;
+    }
+
+    .small-screen {
+        display: block;
+    }
+
+    .main-table {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mobile-map-table {
+        display: flex;
+        flex-direction: row;
+        height: 667px;
+    }
+
+    #map-small {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 92%;
+    }
+
+    .track {
+        height: 100%;
+        width: 8%;
+        background-color: #000;
+    }
+
+    .design {
+        height: 20px;
+        background-color: #000;
+    }
+
+    .promo-col {
+        padding: 20px;
+        background-color: #FFFF33;
+        height: 820px;
+    }
+
+    .map-col {
+        width: 100%;
+        height: 567px;
+    }
+}
+
+@media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) {
+    /* iPhone 6 and iPhone 6+ portrait and landscape */
+    .large-screen {
+        display: none;
+    }
+
+    .small-screen {
+        display: block;
+    }
+
+    .main-table {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mobile-map-table {
+        display: flex;
+        flex-direction: row;
+        height: 667px;
+    }
+
+    #map-small {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 92%;
+    }
+
+    .track {
+        height: 100%;
+        width: 8%;
+        background-color: #000;
+    }
+
+    .design {
+        height: 20px;
+        background-color: #000;
+    }
+
+    .promo-col {
+        padding: 20px;
+        background-color: #FFFF33;
+        height: 820px;
+    }
+
+    .map-col {
+        width: 100%;
+        height: 567px;
+    }
+}
+
+@media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) and (orientation: portrait) {
+    /* iPhone 6 and iPhone 6+ portrait */
+    .large-screen {
+        display: none;
+    }
+
+    .small-screen {
+        display: block;
+    }
+
+    .main-table {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mobile-map-table {
+        display: flex;
+        flex-direction: row;
+        height: 667px;
+    }
+
+    #map-small {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 92%;
+    }
+
+    .track {
+        height: 100%;
+        width: 8%;
+        background-color: #000;
+    }
+
+    .design {
+        height: 20px;
+        background-color: #000;
+    }
+
+    .promo-col {
+        padding: 20px;
+        background-color: #FFFF33;
+        height: 820px;
+    }
+
+    .map-col {
+        width: 100%;
+        height: 567px;
+    }
+}
+
+@media only screen and (max-device-width: 640px), only screen and (max-device-width: 667px), only screen and (max-width: 480px) and (orientation: landscape) {
+    /* iPhone 6 and iPhone 6+ landscape */
+    .large-screen {
+        display: none;
+    }
+
+    .small-screen {
+        display: block;
+    }
+
+    .main-table {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mobile-map-table {
+        display: flex;
+        flex-direction: row;
+        height: 667px;
+    }
+
+    #map-small {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 92%;
+    }
+
+    .track {
+        height: 100%;
+        width: 8%;
+        background-color: #000;
+    }
+
+    .design {
+        height: 20px;
+        background-color: #000;
+    }
+
+    .promo-col {
+        padding: 20px;
+        background-color: #FFFF33;
+        height: 820px;
+    }
+
+    .map-col {
+        width: 100%;
+        height: 567px;
+    }
+}
